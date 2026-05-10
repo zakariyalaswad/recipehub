@@ -16,6 +16,7 @@ use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Validator\Constraints\File;
 
 
+
 class RecetteType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
@@ -60,15 +61,15 @@ class RecetteType extends AbstractType
         'mapped' => false,
         'required' => false,
         'constraints' => [
-            new File([
-                'maxSize' => '2M',
-                'mimeTypes' => [
+            new File(
+                maxSize: '2M',
+                mimeTypes: [
                     'image/jpeg',
                     'image/png',
-                    'image/webp'
-                ]
-            ])
-        ]
+                    'image/webp',
+                ],
+            )
+        ],
     ])
 ;
     }

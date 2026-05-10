@@ -52,7 +52,7 @@ class Recette
     /**
      * @var Collection<int, Ingredient>
      */
-    #[ORM\OneToMany(targetEntity: Ingredient::class, mappedBy: 'recette')]
+    #[ORM\OneToMany(targetEntity: Ingredient::class, mappedBy: 'recette',cascade: ['persist','remove'])]
     private Collection $ingredients;
 
     /**

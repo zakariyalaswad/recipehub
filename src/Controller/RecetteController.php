@@ -10,9 +10,15 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use App\Service\FileUploader;
+
 #[Route('/recettes')]
 final class RecetteController extends AbstractController
 {
+    public function __construct(private FileUploader $fileUploader)
+    {
+    }
+
     #[Route(name: 'app_recette_index', methods: ['GET'])]
     public function index(RecetteRepository $recetteRepository): Response
     {
@@ -28,6 +34,12 @@ final class RecetteController extends AbstractController
         $recette = new Recette();
         $form = $this->createForm(RecetteType::class, $recette);
         $form->handleRequest($request);
+        $imageFile = $form->get('image')->getData();    
+
+        if ($imageFile) {
+            $fileName = $this->fileUploader->upload($imageFile);
+            $recette->setImageName($fileName);
+        }
         $recette->setAuteur($this->getUser());
         $recette->setDateCreation(new \DateTime());
 
@@ -66,7 +78,23 @@ final class RecetteController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $imageFile = $form->get('image')->getData();
+
+            if ($imageFile) {
+
+                // supprimer ancienne image
+                if ($recette->getImageName()) {
+                    $fileUploader->remove($recette->getImageName());
+                }
+
+                // upload nouvelle image
+                $fileName = $fileUploader->upload($imageFile);
+
+                // save nouveau nom
+                $recette->setImageName($fileName);
+            }
             $entityManager->flush();
+            $this->addFlash('success', 'Recette modifiée avec succès');
 
             return $this->redirectToRoute('app_recette_index', [], Response::HTTP_SEE_OTHER);
         }
@@ -88,6 +116,9 @@ final class RecetteController extends AbstractController
             throw $this->createAccessDeniedException();
         }
         if ($this->isCsrfTokenValid('delete'.$recette->getId(), $request->getPayload()->getString('_token'))) {
+            if ($recette->getImageName()) {
+                $fileUploader->remove($recette->getImageName());
+            }
             $entityManager->remove($recette);
             $entityManager->flush();
         }
