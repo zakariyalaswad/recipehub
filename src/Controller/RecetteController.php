@@ -10,8 +10,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
-
-#[Route('/recette')]
+#[Route('/recettes')]
 final class RecetteController extends AbstractController
 {
     #[Route(name: 'app_recette_index', methods: ['GET'])]
@@ -28,6 +27,8 @@ final class RecetteController extends AbstractController
         $recette = new Recette();
         $form = $this->createForm(RecetteType::class, $recette);
         $form->handleRequest($request);
+        $recette->setAuteur($this->getUser());
+        $recette->setDateCreation(new \DateTime());
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->persist($recette);

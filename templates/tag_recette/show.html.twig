@@ -1,0 +1,30 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}TagRecette{% endblock %}
+
+{% block body %}
+    <h1>TagRecette</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ tag_recette.id }}</td>
+            </tr>
+            <tr>
+                <th>Nom</th>
+                <td>{{ tag_recette.nom }}</td>
+            </tr>
+            <tr>
+                <th>Couleur</th>
+                <td>{{ tag_recette.couleur }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_tag_recette_index') }}">back to list</a>
+
+    <a href="{{ path('app_tag_recette_edit', {'id': tag_recette.id}) }}">edit</a>
+
+    {{ include('tag_recette/_delete_form.html.twig') }}
+{% endblock %}

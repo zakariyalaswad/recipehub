@@ -1,0 +1,37 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}TagRecette index{% endblock %}
+
+{% block body %}
+    <h1>TagRecette index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Nom</th>
+                <th>Couleur</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for tag_recette in tag_recettes %}
+            <tr>
+                <td>{{ tag_recette.id }}</td>
+                <td>{{ tag_recette.nom }}</td>
+                <td>{{ tag_recette.couleur }}</td>
+                <td>
+                    <a href="{{ path('app_tag_recette_show', {'id': tag_recette.id}) }}">show</a>
+                    <a href="{{ path('app_tag_recette_edit', {'id': tag_recette.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="4">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_tag_recette_new') }}">Create new</a>
+{% endblock %}
