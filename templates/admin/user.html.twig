@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html class="light" lang="fr">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>RecipeHub Admin - Gestion des Utilisateurs</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;600;700&amp;family=Newsreader:opsz,wght@6..72,600;6..72,700&amp;display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        'on-background': '#161d1f',
+                        'surface': '#f4fafd',
+                        'surface-bright': '#f4fafd',
+                        'on-tertiary-fixed': '#191c1b',
+                        'outline': '#6c7b6d',
+                        'on-tertiary-fixed-variant': '#444746',
+                        'surface-container-high': '#e2e9ec',
+                        'on-secondary-container': '#007239',
+                        'primary-container': '#2ecc71',
+                        'error': '#ba1a1a',
+                        'on-error': '#ffffff',
+                        'tertiary': '#5c5f5e',
+                        'on-surface': '#161d1f',
+                        'secondary-container': '#7bf8a1',
+                        'on-surface-variant': '#3d4a3e',
+                        'surface-variant': '#dde4e6',
+                        'primary': '#006d37',
+                        'on-secondary': '#ffffff',
+                        'on-primary-container': '#005027',
+                        'surface-container-low': '#eef5f7',
+                        'surface-container-lowest': '#ffffff',
+                        'surface-container-highest': '#dde4e6'
+                    },
+                    borderRadius: {
+                        DEFAULT: '0.25rem',
+                        lg: '0.5rem',
+                        xl: '0.75rem',
+                        full: '9999px'
+                    },
+                    spacing: {
+                        unit: '8px',
+                        'container-max': '1200px',
+                        gutter: '24px',
+                        'margin-mobile': '16px',
+                        'margin-desktop': '40px'
+                    },
+                    fontFamily: {
+                        'body-md': ['Be Vietnam Pro'],
+                        'body-lg': ['Be Vietnam Pro'],
+                        'headline-md': ['Newsreader'],
+                        'label-md': ['Be Vietnam Pro'],
+                        'headline-lg': ['Newsreader'],
+                        'headline-xl': ['Newsreader']
+                    },
+                    fontSize: {
+                        'body-md': ['16px', { lineHeight: '24px', fontWeight: '400' }],
+                        'body-lg': ['18px', { lineHeight: '28px', fontWeight: '400' }],
+                        'headline-md': ['24px', { lineHeight: '32px', fontWeight: '600' }],
+                        'label-md': ['14px', { lineHeight: '20px', letterSpacing: '0.02em', fontWeight: '600' }],
+                        'headline-lg': ['32px', { lineHeight: '40px', fontWeight: '600' }],
+                        'headline-xl': ['48px', { lineHeight: '56px', fontWeight: '700' }]
+                    }
+                },
+            },
+        }
+    </script>
+    <style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body { font-family: 'Be Vietnam Pro', sans-serif; }
+        h1, h2, h3 { font-family: 'Newsreader', serif; }
+    </style>
+</head>
+<body class="bg-surface text-on-surface min-h-screen flex">
+<aside class="fixed left-0 top-0 h-full w-64 bg-surface-container-low dark:bg-surface-container-lowest shadow-sm flex flex-col py-unit gap-4 z-50">
+    <div class="px-6 py-8">
+        <h1 class="font-headline-md text-headline-md font-bold text-primary">RecipeHub Admin</h1>
+        <p class="text-on-surface-variant font-label-md text-label-md opacity-70">Platform Manager</p>
+    </div>
+    <nav class="flex-1 flex flex-col gap-1 px-4">
+        <a class="text-on-surface-variant flex items-center px-4 py-3 hover:bg-surface-container-high transition-all rounded-xl group" href="{{ path('app_admin_dashboard') }}">
+            <span class="material-symbols-outlined mr-3 group-hover:scale-110 transition-transform" data-icon="dashboard">dashboard</span>
+            <span class="font-label-md">Dashboard</span>
+        </a>
+        <a class="text-on-surface-variant flex items-center px-4 py-3 hover:bg-surface-container-high transition-all rounded-xl group" href="{{ path('app_admin_recettes') }}">
+            <span class="material-symbols-outlined mr-3 group-hover:scale-110 transition-transform" data-icon="restaurant_menu">restaurant_menu</span>
+            <span class="font-label-md">Recettes</span>
+        </a>
+        <a class="text-on-surface-variant flex items-center px-4 py-3 hover:bg-surface-container-high transition-all rounded-xl group" href="{{ path('app_admin_categories') }}">
+            <span class="material-symbols-outlined mr-3 group-hover:scale-110 transition-transform" data-icon="category">category</span>
+            <span class="font-label-md">Catégories</span>
+        </a>
+        <a class="text-on-surface-variant flex items-center px-4 py-3 hover:bg-surface-container-high transition-all rounded-xl group" href="{{ path('app_admin_tags') }}">
+            <span class="material-symbols-outlined mr-3 group-hover:scale-110 transition-transform" data-icon="label">label</span>
+            <span class="font-label-md">Tags</span>
+        </a>
+        <a class="bg-secondary-container text-on-secondary-container rounded-xl font-bold flex items-center px-4 py-3 shadow-sm" href="{{ path('app_admin_users') }}">
+            <span class="material-symbols-outlined mr-3" data-icon="person">person</span>
+            <span class="font-label-md">Utilisateurs</span>
+        </a>
+    </nav>
+    <div class="px-4 py-6 mt-auto flex flex-col gap-1 border-t border-outline-variant/20">
+        <a class="text-on-surface-variant flex items-center px-4 py-3 hover:bg-surface-container-high transition-all rounded-xl" href="#">
+            <span class="material-symbols-outlined mr-3" data-icon="settings">settings</span>
+            <span class="font-label-md">Settings</span>
+        </a>
+        <a class="text-on-surface-variant flex items-center px-4 py-3 hover:bg-error/10 hover:text-error transition-all rounded-xl" href="{{ path('app_logout') }}">
+            <span class="material-symbols-outlined mr-3" data-icon="logout">logout</span>
+            <span class="font-label-md">Déconnexion</span>
+        </a>
+    </div>
+</aside>
+
+<main class="flex-1 ml-64 p-margin-desktop bg-surface overflow-y-auto">
+    <header class="mb-10 flex flex-col md:flex-row md:items-end justify-between gap-6">
+        <div>
+            <h2 class="font-headline-xl text-headline-xl text-on-surface">Gestion des Utilisateurs</h2>
+            <p class="font-body-lg text-body-lg text-on-surface-variant mt-2 max-w-2xl">Gérez les membres de la communauté RecipeHub, leurs rôles et leurs accès.</p>
+        </div>
+    </header>
+
+    <section class="grid grid-cols-1 md:grid-cols-3 gap-gutter mb-12">
+        <div class="bg-surface-container-lowest p-6 rounded-xl shadow-[0_4px_20px_rgba(46,204,113,0.08)] flex items-center justify-between group hover:-translate-y-1 transition-transform">
+            <div>
+                <p class="font-label-md text-on-surface-variant opacity-70 mb-1">Utilisateurs Totaux</p>
+                <h3 class="font-headline-lg text-headline-lg text-primary">{{ stats.totalUsers }}</h3>
+                <div class="flex items-center text-primary text-xs font-bold mt-2">
+                    <span class="material-symbols-outlined text-sm mr-1" data-icon="trending_up">trending_up</span>
+                    Actifs ce mois
+                </div>
+            </div>
+            <div class="bg-primary-container/20 p-4 rounded-full text-primary group-hover:scale-110 transition-transform">
+                <span class="material-symbols-outlined text-3xl" data-icon="group">group</span>
+            </div>
+        </div>
+        <div class="bg-surface-container-lowest p-6 rounded-xl shadow-[0_4px_20px_rgba(46,204,113,0.08)] flex items-center justify-between group hover:-translate-y-1 transition-transform">
+            <div>
+                <p class="font-label-md text-on-surface-variant opacity-70 mb-1">Administrateurs</p>
+                <h3 class="font-headline-lg text-headline-lg text-secondary">{{ stats.admins }}</h3>
+                <div class="flex items-center text-secondary text-xs font-bold mt-2">
+                    <span class="material-symbols-outlined text-sm mr-1" data-icon="admin_panel_settings">admin_panel_settings</span>
+                    Rôle: Admin
+                </div>
+            </div>
+            <div class="bg-secondary-container/20 p-4 rounded-full text-secondary group-hover:scale-110 transition-transform">
+                <span class="material-symbols-outlined text-3xl" data-icon="admin_panel_settings">admin_panel_settings</span>
+            </div>
+        </div>
+        <div class="bg-surface-container-lowest p-6 rounded-xl shadow-[0_4px_20px_rgba(46,204,113,0.08)] flex items-center justify-between group hover:-translate-y-1 transition-transform">
+            <div>
+                <p class="font-label-md text-on-surface-variant opacity-70 mb-1">Auteurs Actifs</p>
+                <h3 class="font-headline-lg text-headline-lg text-tertiary">{{ stats.activeAuthors }}</h3>
+                <div class="flex items-center text-tertiary text-xs font-bold mt-2">
+                    <span class="material-symbols-outlined text-sm mr-1" data-icon="person">person</span>
+                    Avec contributions
+                </div>
+            </div>
+            <div class="bg-tertiary-container/20 p-4 rounded-full text-tertiary group-hover:scale-110 transition-transform">
+                <span class="material-symbols-outlined text-3xl" data-icon="person">person</span>
+            </div>
+        </div>
+    </section>
+
+    <form method="get" action="{{ path('app_admin_users') }}" class="bg-surface-container-lowest p-6 rounded-2xl shadow-[0_4px_20px_rgba(46,204,113,0.08)] mb-8 flex flex-wrap items-center gap-4">
+        <div class="flex-1 min-w-[300px] relative">
+            <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant" data-icon="search">search</span>
+            <input class="w-full pl-12 pr-4 py-3 bg-surface-container-low border-none rounded-xl focus:ring-2 focus:ring-primary text-body-md placeholder:text-on-surface-variant/50" name="q" value="{{ search ?? '' }}" placeholder="Rechercher par nom ou email..." type="text"/>
+        </div>
+        <div class="flex items-center gap-2">
+            <label class="font-label-md text-on-surface-variant" for="role">Rôle:</label>
+            <select id="role" name="role" class="bg-surface-container-low border-none rounded-xl py-3 px-6 text-body-md focus:ring-2 focus:ring-primary">
+                <option value="">Tous les rôles</option>
+                <option value="ROLE_ADMIN" {% if selectedRole == 'ROLE_ADMIN' %}selected{% endif %}>Admin</option>
+                <option value="ROLE_USER" {% if selectedRole == 'ROLE_USER' %}selected{% endif %}>Utilisateur</option>
+            </select>
+        </div>
+        <button type="submit" class="flex items-center gap-2 px-6 py-3 border border-outline-variant rounded-xl text-on-surface-variant hover:bg-surface-container-high transition-colors">
+            <span class="material-symbols-outlined" data-icon="search">search</span>
+            <span class="font-label-md">Rechercher</span>
+        </button>
+    </form>
+
+    <div class="bg-surface-container-lowest rounded-3xl overflow-hidden shadow-[0_4px_20px_rgba(46,204,113,0.08)] border border-outline-variant/10">
+        <table class="w-full text-left border-collapse">
+            <thead>
+            <tr class="bg-surface-container-low border-b border-outline-variant/30">
+                <th class="px-6 py-5 font-label-md text-on-surface-variant uppercase tracking-wider">Utilisateur</th>
+                <th class="px-6 py-5 font-label-md text-on-surface-variant uppercase tracking-wider">Email</th>
+                <th class="px-6 py-5 font-label-md text-on-surface-variant uppercase tracking-wider">Rôle</th>
+                <th class="px-6 py-5 font-label-md text-on-surface-variant uppercase tracking-wider">Date d'inscription</th>
+                <th class="px-6 py-5 font-label-md text-on-surface-variant uppercase tracking-wider">Statut</th>
+                <th class="px-6 py-5 font-label-md text-on-surface-variant uppercase tracking-wider text-right">Actions</th>
+            </tr>
+            </thead>
+            <tbody class="divide-y divide-outline-variant/20">
+            {% for user in users %}
+                <tr class="hover:bg-surface-container-low/50 transition-colors group">
+                    <td class="px-6 py-4">
+                        <div class="flex items-center gap-3">
+                            {% if user.avatar is defined and user.avatar %}
+                                <img alt="{{ user.pseudo }}" class="w-10 h-10 rounded-full object-cover" src="{{ user.avatar }}"/>
+                            {% else %}
+                                <div class="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center text-primary font-bold text-sm">
+                                    {{ user.pseudo|slice(0, 2)|upper }}
+                                </div>
+                            {% endif %}
+                            <div>
+                                <div class="font-bold text-on-surface font-body-md">{{ user.pseudo }}</div>
+                                <div class="text-sm text-on-surface-variant">{{ user.roles|first == 'ROLE_ADMIN' ? 'Administrateur' : 'Utilisateur' }}</div>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="px-6 py-4 text-on-surface-variant font-body-md">{{ user.email }}</td>
+                    <td class="px-6 py-4">
+                        {% if 'ROLE_ADMIN' in user.roles %}
+                            <span class="px-3 py-1 rounded-full bg-primary-container text-on-primary-container text-xs font-bold">Admin</span>
+                        {% else %}
+                            <span class="px-3 py-1 rounded-full bg-secondary-container/30 text-on-secondary-container text-xs font-bold">Utilisateur</span>
+                        {% endif %}
+                    </td>
+                    <td class="px-6 py-4 text-on-surface-variant font-body-md">{{ user.dateCreation is defined and user.dateCreation ? user.dateCreation|date('d M Y') : '-' }}</td>
+                    <td class="px-6 py-4">
+                        <div class="flex items-center gap-2">
+                            <span class="w-2 h-2 rounded-full {% if user.isVerified %}bg-primary{% else %}bg-error{% endif %}"></span>
+                            <span class="text-on-surface font-body-md">{{ user.isVerified ? 'Actif' : 'Inactif' }}</span>
+                        </div>
+                    </td>
+                    <td class="px-6 py-4 text-right">
+                        <div class="flex items-center justify-end gap-2">
+                            <button class="p-2 hover:bg-primary/10 text-primary rounded-lg transition-colors" title="Voir">
+                                <span class="material-symbols-outlined" data-icon="visibility">visibility</span>
+                            </button>
+                            <button class="p-2 hover:bg-secondary-container text-on-secondary-container rounded-lg transition-colors" title="Modifier">
+                                <span class="material-symbols-outlined" data-icon="edit">edit</span>
+                            </button>
+                            {% if user.isVerified %}
+                                <button class="p-2 hover:bg-error/10 text-error rounded-lg transition-colors" title="Désactiver">
+                                    <span class="material-symbols-outlined" data-icon="block">block</span>
+                                </button>
+                            {% else %}
+                                <button class="p-2 hover:bg-primary/10 text-primary rounded-lg transition-colors" title="Réactiver">
+                                    <span class="material-symbols-outlined" data-icon="check_circle">check_circle</span>
+                                </button>
+                            {% endif %}
+                        </div>
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="6" class="px-6 py-10 text-center text-on-surface-variant">Aucun utilisateur trouvé.</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+
+        {% if totalPages > 1 %}
+        <div class="bg-surface-container-low px-6 py-4 border-t border-outline-variant/30 flex items-center justify-between">
+            <span class="font-label-md text-on-surface-variant">Affichage de {{ from }}-{{ to }} sur {{ totalUsers }} utilisateurs</span>
+            <div class="flex items-center gap-2">
+                <a href="{{ page > 1 ? path('app_admin_users', app.request.query.all|merge({'page': page - 1})) : '#' }}" class="p-2 rounded-lg border border-outline-variant hover:bg-surface-container-high transition-colors {% if page == 1 %}opacity-30 pointer-events-none{% endif %}">
+                    <span class="material-symbols-outlined" data-icon="chevron_left">chevron_left</span>
+                </a>
+                {% for pageNumber in 1..totalPages %}
+                    <a href="{{ path('app_admin_users', app.request.query.all|merge({'page': pageNumber})) }}" class="w-10 h-10 rounded-lg {% if pageNumber == page %}bg-primary text-on-primary font-bold{% else %}hover:bg-surface-container-high text-on-surface-variant{% endif %} transition-colors flex items-center justify-center">{{ pageNumber }}</a>
+                {% endfor %}
+                <a href="{{ page < totalPages ? path('app_admin_users', app.request.query.all|merge({'page': page + 1})) : '#' }}" class="p-2 rounded-lg border border-outline-variant hover:bg-surface-container-high transition-colors {% if page == totalPages %}opacity-30 pointer-events-none{% endif %}">
+                    <span class="material-symbols-outlined" data-icon="chevron_right">chevron_right</span>
+                </a>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</main>
+</body>
+</html>

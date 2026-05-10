@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html class="light" lang="fr">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>RecipeHub Admin - Vue d'ensemble</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;600;700&amp;family=Newsreader:opsz,wght@6..72,600;6..72,700&amp;display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        'on-background': '#161d1f',
+                        'surface': '#f4fafd',
+                        'surface-bright': '#f4fafd',
+                        'on-tertiary-fixed': '#191c1b',
+                        'outline': '#6c7b6d',
+                        'on-tertiary-fixed-variant': '#444746',
+                        'surface-container-high': '#e2e9ec',
+                        'on-secondary-container': '#007239',
+                        'primary-container': '#2ecc71',
+                        'error': '#ba1a1a',
+                        'on-error': '#ffffff',
+                        'tertiary': '#5c5f5e',
+                        'on-surface': '#161d1f',
+                        'secondary-container': '#7bf8a1',
+                        'on-surface-variant': '#3d4a3e',
+                        'surface-variant': '#dde4e6',
+                        'primary': '#006d37',
+                        'on-secondary': '#ffffff',
+                        'on-primary-container': '#005027',
+                        'surface-container-low': '#eef5f7',
+                        'surface-container-lowest': '#ffffff',
+                        'surface-container-highest': '#dde4e6'
+                    },
+                    borderRadius: {
+                        DEFAULT: '0.25rem',
+                        lg: '0.5rem',
+                        xl: '0.75rem',
+                        full: '9999px'
+                    },
+                    spacing: {
+                        unit: '8px',
+                        'container-max': '1200px',
+                        gutter: '24px',
+                        'margin-mobile': '16px',
+                        'margin-desktop': '40px'
+                    },
+                    fontFamily: {
+                        'body-md': ['Be Vietnam Pro'],
+                        'body-lg': ['Be Vietnam Pro'],
+                        'headline-md': ['Newsreader'],
+                        'label-md': ['Be Vietnam Pro'],
+                        'headline-lg': ['Newsreader'],
+                        'headline-xl': ['Newsreader']
+                    },
+                    fontSize: {
+                        'body-md': ['16px', { lineHeight: '24px', fontWeight: '400' }],
+                        'body-lg': ['18px', { lineHeight: '28px', fontWeight: '400' }],
+                        'headline-md': ['24px', { lineHeight: '32px', fontWeight: '600' }],
+                        'label-md': ['14px', { lineHeight: '20px', letterSpacing: '0.02em', fontWeight: '600' }],
+                        'headline-lg': ['32px', { lineHeight: '40px', fontWeight: '600' }],
+                        'headline-xl': ['48px', { lineHeight: '56px', fontWeight: '700' }]
+                    }
+                },
+            },
+        }
+    </script>
+    <style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body { font-family: 'Be Vietnam Pro', sans-serif; }
+        h1, h2, h3 { font-family: 'Newsreader', serif; }
+    </style>
+</head>
+<body class="bg-surface text-on-surface min-h-screen flex">
+<aside class="fixed left-0 top-0 h-full w-64 bg-surface-container-low dark:bg-surface-container-lowest shadow-sm flex flex-col py-unit gap-4 z-50">
+    <div class="px-6 py-8">
+        <h1 class="font-headline-md text-headline-md font-bold text-primary">RecipeHub Admin</h1>
+        <p class="text-on-surface-variant font-label-md text-label-md opacity-70">Platform Manager</p>
+    </div>
+    <nav class="flex-1 flex flex-col gap-1 px-4">
+        <a class="bg-secondary-container text-on-secondary-container rounded-xl font-bold flex items-center px-4 py-3 shadow-sm" href="{{ path('app_admin_dashboard') }}">
+            <span class="material-symbols-outlined mr-3" data-icon="dashboard">dashboard</span>
+            <span class="font-label-md">Dashboard</span>
+        </a>
+        <a class="text-on-surface-variant flex items-center px-4 py-3 hover:bg-surface-container-high transition-all rounded-xl group" href="{{ path('app_admin_recettes') }}">
+            <span class="material-symbols-outlined mr-3 group-hover:scale-110 transition-transform" data-icon="restaurant_menu">restaurant_menu</span>
+            <span class="font-label-md">Recettes</span>
+        </a>
+        <a class="text-on-surface-variant flex items-center px-4 py-3 hover:bg-surface-container-high transition-all rounded-xl group" href="{{ path('app_admin_categories') }}">
+            <span class="material-symbols-outlined mr-3 group-hover:scale-110 transition-transform" data-icon="category">category</span>
+            <span class="font-label-md">Catégories</span>
+        </a>
+        <a class="text-on-surface-variant flex items-center px-4 py-3 hover:bg-surface-container-high transition-all rounded-xl group" href="{{ path('app_admin_tags') }}">
+            <span class="material-symbols-outlined mr-3 group-hover:scale-110 transition-transform" data-icon="label">label</span>
+            <span class="font-label-md">Tags</span>
+        </a>
+        <a class="text-on-surface-variant flex items-center px-4 py-3 hover:bg-surface-container-high transition-all rounded-xl group" href="{{ path('app_admin_users') }}">
+            <span class="material-symbols-outlined mr-3 group-hover:scale-110 transition-transform" data-icon="person">person</span>
+            <span class="font-label-md">Utilisateurs</span>
+        </a>
+    </nav>
+    <div class="px-4 py-6 mt-auto flex flex-col gap-1 border-t border-outline-variant/20">
+        <a class="text-on-surface-variant flex items-center px-4 py-3 hover:bg-surface-container-high transition-all rounded-xl" href="#">
+            <span class="material-symbols-outlined mr-3" data-icon="settings">settings</span>
+            <span class="font-label-md">Settings</span>
+        </a>
+        <a class="text-on-surface-variant flex items-center px-4 py-3 hover:bg-error/10 hover:text-error transition-all rounded-xl" href="{{ path('app_logout') }}">
+            <span class="material-symbols-outlined mr-3" data-icon="logout">logout</span>
+            <span class="font-label-md">Déconnexion</span>
+        </a>
+    </div>
+</aside>
+
+<main class="flex-1 ml-64 p-margin-desktop bg-surface overflow-y-auto">
+    <header class="mb-10 flex flex-col md:flex-row md:items-end justify-between gap-6">
+        <div>
+            <h2 class="font-headline-lg text-headline-lg text-primary">Vue d'ensemble</h2>
+            <p class="font-body-md text-on-surface-variant mt-2">Bienvenue, voici l'état actuel de votre plateforme culinaire.</p>
+        </div>
+        <a href="{{ path('app_recette_new') }}" class="bg-primary text-on-primary px-6 py-3 rounded-xl font-label-md text-label-md flex items-center gap-2 shadow-[0_4px_20px_rgba(46,204,113,0.15)] hover:-translate-y-1 transition-all">
+            <span class="material-symbols-outlined" data-icon="add">add</span>
+            Nouvelle Recette
+        </a>
+    </header>
+
+    <section class="grid grid-cols-1 md:grid-cols-3 gap-gutter mb-12">
+        <div class="bg-surface-container-lowest p-6 rounded-xl shadow-[0_4px_20px_rgba(46,204,113,0.08)] flex items-center justify-between group hover:-translate-y-1 transition-transform">
+            <div>
+                <p class="font-label-md text-on-surface-variant opacity-70 mb-1">Total Recettes</p>
+                <h3 class="font-headline-lg text-headline-lg text-primary">{{ stats.recipes }}</h3>
+                <div class="flex items-center text-primary text-xs font-bold mt-2">
+                    <span class="material-symbols-outlined text-sm mr-1" data-icon="trending_up">trending_up</span>
+                    Nouvelles cette année
+                </div>
+            </div>
+            <div class="bg-primary-container/20 p-4 rounded-full text-primary group-hover:scale-110 transition-transform">
+                <span class="material-symbols-outlined text-3xl" data-icon="restaurant">restaurant</span>
+            </div>
+        </div>
+        <div class="bg-surface-container-lowest p-6 rounded-xl shadow-[0_4px_20px_rgba(46,204,113,0.08)] flex items-center justify-between group hover:-translate-y-1 transition-transform">
+            <div>
+                <p class="font-label-md text-on-surface-variant opacity-70 mb-1">Total Catégories</p>
+                <h3 class="font-headline-lg text-headline-lg text-secondary">{{ stats.categories }}</h3>
+                <div class="flex items-center text-secondary text-xs font-bold mt-2">
+                    <span class="material-symbols-outlined text-sm mr-1" data-icon="category">category</span>
+                    Organisées
+                </div>
+            </div>
+            <div class="bg-secondary-container/20 p-4 rounded-full text-secondary group-hover:scale-110 transition-transform">
+                <span class="material-symbols-outlined text-3xl" data-icon="category">category</span>
+            </div>
+        </div>
+        <div class="bg-surface-container-lowest p-6 rounded-xl shadow-[0_4px_20px_rgba(46,204,113,0.08)] flex items-center justify-between group hover:-translate-y-1 transition-transform">
+            <div>
+                <p class="font-label-md text-on-surface-variant opacity-70 mb-1">Total Tags</p>
+                <h3 class="font-headline-lg text-headline-lg text-tertiary">{{ stats.tags }}</h3>
+                <div class="flex items-center text-tertiary text-xs font-bold mt-2">
+                    <span class="material-symbols-outlined text-sm mr-1" data-icon="label">label</span>
+                    Disponibles
+                </div>
+            </div>
+            <div class="bg-tertiary-container/20 p-4 rounded-full text-tertiary group-hover:scale-110 transition-transform">
+                <span class="material-symbols-outlined text-3xl" data-icon="label">label</span>
+            </div>
+        </div>
+    </section>
+
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-gutter">
+        <section class="lg:col-span-2">
+            <div class="bg-surface-container-lowest rounded-xl shadow-[0_4px_20px_rgba(46,204,113,0.08)] overflow-hidden">
+                <div class="p-6 border-b border-outline-variant/30 flex justify-between items-center">
+                    <h4 class="font-headline-md text-headline-md text-on-surface">Accès Rapide</h4>
+                    <a href="{{ path('app_recette_index') }}" class="text-primary font-label-md text-label-md hover:underline">Voir tout</a>
+                </div>
+                <div class="p-6 space-y-4">
+                    <a href="{{ path('app_admin_recettes') }}" class="block p-4 border border-outline-variant/30 rounded-lg hover:bg-surface-container-high transition-colors group">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center gap-3">
+                                <div class="w-10 h-10 rounded-lg bg-primary/20 flex items-center justify-center group-hover:scale-110 transition-transform">
+                                    <span class="material-symbols-outlined text-primary" data-icon="restaurant_menu">restaurant_menu</span>
+                                </div>
+                                <div>
+                                    <p class="font-bold text-on-surface">Gestion des Recettes</p>
+                                    <p class="text-xs text-on-surface-variant">{{ stats.recipes }} recettes au total</p>
+                                </div>
+                            </div>
+                            <span class="material-symbols-outlined text-on-surface-variant">chevron_right</span>
+                        </div>
+                    </a>
+                    <a href="{{ path('app_admin_categories') }}" class="block p-4 border border-outline-variant/30 rounded-lg hover:bg-surface-container-high transition-colors group">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center gap-3">
+                                <div class="w-10 h-10 rounded-lg bg-secondary/20 flex items-center justify-center group-hover:scale-110 transition-transform">
+                                    <span class="material-symbols-outlined text-secondary" data-icon="category">category</span>
+                                </div>
+                                <div>
+                                    <p class="font-bold text-on-surface">Gestion des Catégories</p>
+                                    <p class="text-xs text-on-surface-variant">{{ stats.categories }} catégories disponibles</p>
+                                </div>
+                            </div>
+                            <span class="material-symbols-outlined text-on-surface-variant">chevron_right</span>
+                        </div>
+                    </a>
+                    <a href="{{ path('app_admin_tags') }}" class="block p-4 border border-outline-variant/30 rounded-lg hover:bg-surface-container-high transition-colors group">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center gap-3">
+                                <div class="w-10 h-10 rounded-lg bg-tertiary/20 flex items-center justify-center group-hover:scale-110 transition-transform">
+                                    <span class="material-symbols-outlined text-tertiary" data-icon="label">label</span>
+                                </div>
+                                <div>
+                                    <p class="font-bold text-on-surface">Gestion des Tags</p>
+                                    <p class="text-xs text-on-surface-variant">{{ stats.tags }} tags pour organiser</p>
+                                </div>
+                            </div>
+                            <span class="material-symbols-outlined text-on-surface-variant">chevron_right</span>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <section class="flex flex-col gap-gutter">
+            <div class="bg-primary text-on-primary p-6 rounded-xl relative overflow-hidden group h-full flex flex-col">
+                <div class="relative z-10 flex-1 flex flex-col justify-between">
+                    <div>
+                        <h4 class="font-headline-md text-headline-md mb-2">Créer une Recette</h4>
+                        <p class="text-on-primary/80 mb-6 font-body-md">Partagez votre création culinaire avec la communauté RecipeHub.</p>
+                    </div>
+                    <a href="{{ path('app_recette_new') }}" class="bg-on-primary text-primary font-bold px-6 py-2 rounded-lg hover:scale-105 transition-transform inline-block w-fit">
+                        Créer maintenant
+                    </a>
+                </div>
+                <span class="material-symbols-outlined absolute -bottom-4 -right-4 text-6xl opacity-10 group-hover:rotate-12 transition-transform" data-icon="restaurant">restaurant</span>
+            </div>
+
+            <div class="bg-surface-container-low p-6 rounded-xl border border-outline-variant/30">
+                <div class="flex items-center justify-between mb-4">
+                    <h4 class="font-label-md text-label-md text-on-surface-variant font-bold uppercase tracking-wider">Statistiques</h4>
+                    <span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
+                </div>
+                <div class="space-y-4">
+                    <div>
+                        <div class="flex justify-between text-xs font-bold mb-2">
+                            <span>Recettes</span>
+                            <span>{{ (stats.recipes / 100)|round(1) }}%</span>
+                        </div>
+                        <div class="w-full bg-surface-container-high h-2 rounded-full overflow-hidden">
+                            <div class="bg-primary h-full w-3/4"></div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="flex justify-between text-xs font-bold mb-2">
+                            <span>Catégories</span>
+                            <span>{{ (stats.categories / 10)|round(1) }}%</span>
+                        </div>
+                        <div class="w-full bg-surface-container-high h-2 rounded-full overflow-hidden">
+                            <div class="bg-secondary h-full w-1/2"></div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="flex justify-between text-xs font-bold mb-2">
+                            <span>Tags</span>
+                            <span>{{ (stats.tags / 50)|round(1) }}%</span>
+                        </div>
+                        <div class="w-full bg-surface-container-high h-2 rounded-full overflow-hidden">
+                            <div class="bg-tertiary h-full w-2/3"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</main>
+</body>
+</html>
