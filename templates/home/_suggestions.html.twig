@@ -1,0 +1,32 @@
+<section id="seasonal">
+    <div class="flex justify-between items-end mb-10">
+        <div>
+            <h2 class="font-headline-md text-headline-md">More recipes you'll love</h2>
+            <p class="text-on-surface-variant font-body-md">Hand-picked for your culinary journey</p>
+        </div>
+        <a class="text-primary font-bold hover:underline flex items-center gap-2" href="#browse">
+            View all recipes <span class="material-symbols-outlined">arrow_forward</span>
+        </a>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        {% for suggestion in suggestions %}
+            <div class="group bg-white rounded-3xl overflow-hidden recipe-shadow hover:-translate-y-2 transition-all duration-300">
+                <div class="h-64 relative overflow-hidden">
+                    <img class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" alt="{{ suggestion.title }}" src="{{ suggestion.image }}"/>
+                    <div class="absolute top-4 left-4 flex gap-2">
+                        <span class="bg-white/90 backdrop-blur px-3 py-1 rounded-full text-[12px] font-bold">⭐ {{ suggestion.rating }}</span>
+                        <span class="bg-primary/90 text-on-primary px-3 py-1 rounded-full text-[12px] font-bold">{{ suggestion.tag }}</span>
+                    </div>
+                </div>
+                <div class="p-6">
+                    <h3 class="font-bold text-body-lg mb-2 group-hover:text-primary transition-colors">{{ suggestion.title }}</h3>
+                    <div class="flex justify-between text-label-md text-on-surface-variant border-t border-outline-variant/30 pt-4 mt-4 gap-2">
+                        <span>{{ suggestion.calories }}</span>
+                        <span>{{ suggestion.protein }}</span>
+                        <span>{{ suggestion.time }}</span>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</section>

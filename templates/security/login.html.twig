@@ -1,34 +1,205 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Log in!{% endblock %}
+{% block title %}Se connecter - RecipeHub{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;600;700;800&family=Be+Vietnam+Pro:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    <script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              colors: {
+                "secondary-fixed": "#7efba4",
+                "tertiary-fixed": "#e1e3e1",
+                "surface-container-high": "#e2e9ec",
+                "secondary": "#006d37",
+                "surface-container-highest": "#dde4e6",
+                "on-primary-fixed-variant": "#005228",
+                "on-primary-fixed": "#00210c",
+                "tertiary-fixed-dim": "#c5c7c5",
+                "tertiary": "#5c5f5e",
+                "surface-dim": "#d4dbdd",
+                "secondary-container": "#7bf8a1",
+                "on-primary": "#ffffff",
+                "on-primary-container": "#005027",
+                "on-secondary-fixed": "#00210c",
+                "on-background": "#161d1f",
+                "on-error": "#ffffff",
+                "inverse-surface": "#2b3234",
+                "outline-variant": "#bbcbbb",
+                "on-secondary-fixed-variant": "#005228",
+                "secondary-fixed-dim": "#61de8a",
+                "on-tertiary-fixed-variant": "#444746",
+                "inverse-primary": "#4ae183",
+                "surface-bright": "#f4fafd",
+                "primary-fixed-dim": "#4ae183",
+                "surface-container": "#e8eff1",
+                "on-secondary-container": "#007239",
+                "inverse-on-surface": "#ebf2f4",
+                "outline": "#6c7b6d",
+                "error": "#ba1a1a",
+                "surface-variant": "#dde4e6",
+                "surface-container-low": "#eef5f7",
+                "on-surface": "#161d1f",
+                "on-error-container": "#93000a",
+                "surface": "#f4fafd",
+                "primary-fixed": "#6bfe9c",
+                "primary": "#006d37",
+                "tertiary-container": "#b1b3b2",
+                "primary-container": "#2ecc71",
+                "on-tertiary-fixed": "#191c1b",
+                "background": "#f4fafd",
+                "on-tertiary-container": "#424644",
+                "surface-container-lowest": "#ffffff",
+                "on-tertiary": "#ffffff",
+                "on-surface-variant": "#3d4a3e",
+                "surface-tint": "#006d37",
+                "error-container": "#ffdad6",
+                "on-secondary": "#ffffff"
+              },
+              borderRadius: {
+                DEFAULT: "0.25rem",
+                lg: "0.5rem",
+                xl: "0.75rem",
+                full: "9999px"
+              },
+              spacing: {
+                container-max: "1200px",
+                gutter: "24px",
+                unit: "8px",
+                "margin-desktop": "40px",
+                "margin-mobile": "16px"
+              },
+              fontFamily: {
+                "headline-xl": ["Newsreader"],
+                "body-lg": ["Be Vietnam Pro"],
+                "body-md": ["Be Vietnam Pro"],
+                "label-md": ["Be Vietnam Pro"],
+                "headline-md": ["Newsreader"],
+                "headline-lg": ["Newsreader"],
+                "headline-lg-mobile": ["Newsreader"]
+              },
+              fontSize: {
+                "headline-xl": ["48px", { lineHeight: "56px", fontWeight: "700" }],
+                "body-lg": ["18px", { lineHeight: "28px", fontWeight: "400" }],
+                "body-md": ["16px", { lineHeight: "24px", fontWeight: "400" }],
+                "label-md": ["14px", { lineHeight: "20px", letterSpacing: "0.02em", fontWeight: "600" }],
+                "headline-md": ["24px", { lineHeight: "32px", fontWeight: "600" }],
+                "headline-lg": ["32px", { lineHeight: "40px", fontWeight: "600" }],
+                "headline-lg-mobile": ["28px", { lineHeight: "36px", fontWeight: "600" }]
+              }
+            },
+          },
+        }
+    </script>
+    <style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body { font-family: 'Be Vietnam Pro', sans-serif; }
+        h1, h2, h3 { font-family: 'Newsreader', serif; }
+        .auth-shadow { box-shadow: 0 4px 20px rgba(46, 204, 113, 0.08); }
+    </style>
+{% endblock %}
 
 {% block body %}
-<form method="post">
-    {% if error %}
-        <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
-    {% endif %}
+    <div class="bg-surface text-on-surface min-h-screen flex flex-col">
+        <main class="flex-grow flex items-center justify-center relative overflow-hidden px-margin-mobile md:px-margin-desktop py-12">
+            <div class="absolute inset-0 z-0 opacity-10">
+                <img class="w-full h-full object-cover" alt="Fresh culinary ingredients on a marble surface" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD8KhgXqRElj0wRiiW_bnGMfGEuAltyN3DHHgIFAIVWHL30QGskdmHQosBaD4x08mbop0zFM6McZxME1sR3Fv7Mg7eGKKRgfTK3Jh3_Ri0UKDQ78D7bADAf_gXBuqx5Wgv9it9bKeUJaNXQfiYqTRE5x-6kHbzVJRog_bqfJysSHXLanYTiEbTqFCTS8lDQdV_HcWQ0yW1L5UCYzhISY3UY4KVJqNAGsdIUX6LuQ1t2bmqk_MCICvqELvZ0BX_vGRsXiaYlnHnhVBQ"/>
+            </div>
 
-    {% if app.user %}
-        <div class="mb-3">
-            You are logged in as {{ app.user.userIdentifier }}, <a href="{{ logout_path() }}">Logout</a>
-        </div>
-    {% endif %}
+            <div class="relative z-10 w-full max-w-[480px]">
+                <div class="bg-surface-container-lowest rounded-3xl auth-shadow p-unit*6 md:p-10 flex flex-col gap-8 border border-outline-variant/30">
+                    <div class="flex flex-col items-center text-center gap-2">
+                        <div class="flex items-center gap-2 mb-4">
+                            <span class="material-symbols-outlined text-primary text-[40px]" style="font-variation-settings: 'FILL' 1;">restaurant_menu</span>
+                            <h1 class="font-headline-lg text-headline-lg font-bold text-primary tracking-tight">RecipeHub</h1>
+                        </div>
+                        <h2 class="font-headline-md text-headline-md text-on-surface">Welcome Back</h2>
+                        <p class="font-body-md text-on-surface-variant">Log in to access your saved recipes and kitchen tools.</p>
+                    </div>
 
-    <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
-    <label for="inputEmail">Email</label>
-    <input type="email" value="{{ last_username }}" name="email" id="inputEmail" class="form-control" autocomplete="email" required autofocus>
-    <label for="inputPassword">Password</label>
-    <input type="password" name="password" id="inputPassword" class="form-control" autocomplete="current-password" required>
-    <input type="hidden" name="_csrf_token" data-controller="csrf-protection" value="{{ csrf_token('authenticate') }}">
+                    {% if error %}
+                        <div class="rounded-xl border border-error/20 bg-error-container/60 text-on-error-container px-4 py-3 text-sm">
+                            {{ error.messageKey|trans(error.messageData, 'security') }}
+                        </div>
+                    {% endif %}
 
-    <div class="checkbox mb-3">
-        <label>
-            <input type="checkbox" name="_remember_me"> Remember me
-        </label>
+                    {% if app.user %}
+                        <div class="rounded-xl border border-primary/20 bg-primary-container/20 text-on-surface px-4 py-3 text-sm">
+                            You are logged in as {{ app.user.userIdentifier }}. <a class="text-primary font-bold hover:underline" href="{{ path('app_logout') }}">Logout</a>
+                        </div>
+                    {% endif %}
+
+                    <form method="post" class="flex flex-col gap-6">
+                        <div class="flex flex-col gap-2">
+                            <label class="font-label-md text-label-md text-on-surface-variant ml-1" for="email">Email</label>
+                            <div class="relative group">
+                                <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-outline group-focus-within:text-primary transition-colors">mail</span>
+                                <input class="w-full pl-12 pr-4 py-3 bg-surface rounded-lg border border-outline-variant focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all font-body-md text-on-surface" id="email" name="email" placeholder="chef@recipehub.com" type="email" value="{{ last_username }}" autocomplete="email" required autofocus/>
+                            </div>
+                        </div>
+
+                        <div class="flex flex-col gap-2">
+                            <div class="flex justify-between items-center px-1">
+                                <label class="font-label-md text-label-md text-on-surface-variant" for="password">Password</label>
+                                <a class="font-label-md text-label-md text-primary hover:underline transition-all" href="{{ path('app_register') }}">Create account</a>
+                            </div>
+                            <div class="relative group">
+                                <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-outline group-focus-within:text-primary transition-colors">lock</span>
+                                <input class="w-full pl-12 pr-4 py-3 bg-surface rounded-lg border border-outline-variant focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all font-body-md text-on-surface" id="password" name="password" placeholder="••••••••" type="password" autocomplete="current-password" required/>
+                                <button class="absolute right-4 top-1/2 -translate-y-1/2 text-outline hover:text-on-surface-variant transition-colors" type="button">
+                                    <span class="material-symbols-outlined">visibility</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <input type="hidden" name="_csrf_token" data-controller="csrf-protection" value="{{ csrf_token('authenticate') }}">
+
+                        <div class="flex items-center justify-between gap-4 text-sm text-on-surface-variant">
+                            <label class="flex items-center gap-3 cursor-pointer">
+                                <input class="appearance-none w-5 h-5 border-2 border-outline-variant rounded-md checked:bg-primary checked:border-primary transition-all" type="checkbox" name="_remember_me"/>
+                                <span>Remember me</span>
+                            </label>
+                            <a class="text-primary font-bold hover:underline transition-all" href="#">Forgot Password?</a>
+                        </div>
+
+                        <button class="w-full py-4 bg-secondary text-on-primary rounded-lg font-label-md text-lg shadow-sm hover:bg-primary transition-all active:scale-[0.98] mt-2 flex items-center justify-center gap-2" type="submit">
+                            Se connecter
+                            <span class="material-symbols-outlined">arrow_forward</span>
+                        </button>
+                    </form>
+
+                    <div class="flex items-center gap-4 text-outline-variant">
+                        <div class="h-[1px] flex-grow bg-surface-variant"></div>
+                        <span class="font-label-md text-on-surface-variant">or continue with</span>
+                        <div class="h-[1px] flex-grow bg-surface-variant"></div>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-4">
+                        <button class="flex items-center justify-center gap-3 py-3 px-4 border border-outline-variant rounded-lg font-label-md text-on-surface-variant hover:bg-surface-container-low transition-colors" type="button">
+                            <img alt="Google" class="w-5 h-5" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDZqMPBpQT3o0yixOFyD_WZ6kWO_BIay-wp6jlEjHphF6ae-L3NTBSWFqQO550Qe-E7vlSLww4EyjyZEMjyLmJ39Mxo_HNfmab694UIpDLBfi9aguC8X3mpz9FRshmRuSDZB1FlmktnV4lct4sumP_B7VMeONFmd3gKvXVbAfzJ8zl0sw8M7sm6J3zxBV1fIw8Bzhjfr-Zd6fNnZic-tFLTQTNycxTJ6YjAwYeaFQABCmnMBzfYWRXe1pH4afHu6CYcbIdEI3gMWPw"/>
+                            Google
+                        </button>
+                        <button class="flex items-center justify-center gap-3 py-3 px-4 border border-outline-variant rounded-lg font-label-md text-on-surface-variant hover:bg-surface-container-low transition-colors" type="button">
+                            <span class="material-symbols-outlined text-[#1877F2]" style="font-variation-settings: 'FILL' 1;">social_leaderboard</span>
+                            Facebook
+                        </button>
+                    </div>
+
+                    <div class="text-center pt-2">
+                        <p class="font-body-md text-body-md text-on-surface-variant">
+                            Don't have an account?
+                            <a class="text-primary font-bold hover:underline transition-all" href="{{ path('app_register') }}">Sign Up</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </main>
     </div>
-
-    <button class="btn btn-lg btn-primary" type="submit">
-        Sign in
-    </button>
-</form>
 {% endblock %}
