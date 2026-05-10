@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Controller;
-
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use App\Entity\Recette;
 use App\Form\RecetteType;
 use App\Repository\RecetteRepository;
@@ -22,6 +22,7 @@ final class RecetteController extends AbstractController
     }
 
     #[Route('/new', name: 'app_recette_new', methods: ['GET', 'POST'])]
+    #[IsGranted('ROLE_CUISINIER')]  
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
         $recette = new Recette();
@@ -52,8 +53,15 @@ final class RecetteController extends AbstractController
     }
 
     #[Route('/{id}/edit', name: 'app_recette_edit', methods: ['GET', 'POST'])]
+    #[IsGranted('ROLE_CUISINIER')]
     public function edit(Request $request, Recette $recette, EntityManagerInterface $entityManager): Response
     {
+        if (
+            $recette->getAuteur() !== $this->getUser()
+            && !$this->isGranted('ROLE_ADMIN')
+        ) {
+            throw $this->createAccessDeniedException();
+        }
         $form = $this->createForm(RecetteType::class, $recette);
         $form->handleRequest($request);
 
@@ -70,8 +78,15 @@ final class RecetteController extends AbstractController
     }
 
     #[Route('/{id}', name: 'app_recette_delete', methods: ['POST'])]
+    #[IsGranted('ROLE_CUISINIER')]
     public function delete(Request $request, Recette $recette, EntityManagerInterface $entityManager): Response
     {
+        if (
+            $recette->getAuteur() !== $this->getUser()
+            && !$this->isGranted('ROLE_ADMIN')
+        ) {
+            throw $this->createAccessDeniedException();
+        }
         if ($this->isCsrfTokenValid('delete'.$recette->getId(), $request->getPayload()->getString('_token'))) {
             $entityManager->remove($recette);
             $entityManager->flush();
