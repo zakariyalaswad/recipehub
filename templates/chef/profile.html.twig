@@ -1,0 +1,158 @@
+{% extends "base.html.twig" %}
+
+{% block title %}Mon Profil - RecipeHub{% endblock %}
+
+{% block body %}
+<div class="min-h-screen bg-slate-50">
+    <div class="flex">
+        <!-- Sidebar -->
+        <aside class="fixed left-0 top-0 h-screen w-16 bg-[#006d37] shadow-lg flex flex-col items-center py-8 gap-8">
+            <a href="{{ path('app_home') }}" class="text-white hover:bg-[#005a2d] p-2 rounded-lg transition-colors" title="Accueil">
+                <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
+                </svg>
+            </a>
+
+            <a href="{{ path('app_chef_dashboard') }}" class="text-white hover:bg-[#005a2d] p-2 rounded-lg transition-colors" title="Mon Tableau de Bord">
+                <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"/>
+                </svg>
+            </a>
+
+            <a href="{{ path('app_chef_profile') }}" class="text-white bg-[#005a2d] p-2 rounded-lg" title="Mon Profil">
+                <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+                </svg>
+            </a>
+
+            <a href="{{ path('app_tags_index') }}" class="text-white hover:bg-[#005a2d] p-2 rounded-lg transition-colors" title="Étiquettes">
+                <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm0-13c-2.76 0-5 2.24-5 5s2.24 5 5 5 5-2.24 5-5-2.24-5-5-5z"/>
+                </svg>
+            </a>
+
+            <div class="mt-auto">
+                <a href="{{ path('app_logout') }}" class="text-red-200 hover:bg-red-600/20 p-2 rounded-lg transition-colors" title="Déconnexion">
+                    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.58L17 17l5-5zM4 5h8V3H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h8v-2H4V5z"/>
+                    </svg>
+                </a>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="flex-1 ml-16">
+            <!-- Header -->
+            <div class="bg-white border-b border-slate-200 p-6 sticky top-0 z-10">
+                <div class="max-w-7xl mx-auto">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <h1 class="text-3xl font-newsreader font-bold text-slate-900">Mon Profil</h1>
+                            <p class="text-slate-600 mt-1">Gérez vos informations personnelles</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Content -->
+            <div class="p-6">
+                <div class="max-w-2xl mx-auto">
+                    <!-- Profile Card -->
+                    <div class="bg-white rounded-xl p-8 border border-slate-200 shadow-recipe mb-8">
+                        <div class="flex items-center gap-6 mb-8 pb-8 border-b border-slate-200">
+                            <!-- Avatar -->
+                            <div class="flex-shrink-0">
+                                <div class="w-20 h-20 rounded-full bg-gradient-to-br from-[#006d37] to-[#004d28] flex items-center justify-center text-white text-2xl font-bold">
+                                    {{ app.user.pseudo|slice(0, 2)|upper }}
+                                </div>
+                            </div>
+                            <div class="flex-1">
+                                <h2 class="text-2xl font-newsreader font-bold text-slate-900">{{ app.user.pseudo }}</h2>
+                                <p class="text-slate-600">{{ app.user.email }}</p>
+                                <div class="flex gap-2 mt-3">
+                                    {% if 'ROLE_ADMIN' in app.user.roles %}
+                                        <span class="inline-block bg-red-100 text-red-700 text-xs font-medium px-3 py-1 rounded-full">
+                                            Administrateur
+                                        </span>
+                                    {% else %}
+                                        <span class="inline-block bg-[#006d37]/10 text-[#006d37] text-xs font-medium px-3 py-1 rounded-full">
+                                            Cuisinier
+                                        </span>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Info Grid -->
+                        <div class="grid grid-cols-2 gap-6 mb-8">
+                            <div>
+                                <label class="block text-sm text-slate-600 font-medium mb-2">Pseudo</label>
+                                <p class="text-lg text-slate-900">{{ app.user.pseudo }}</p>
+                            </div>
+                            <div>
+                                <label class="block text-sm text-slate-600 font-medium mb-2">Email</label>
+                                <p class="text-lg text-slate-900">{{ app.user.email }}</p>
+                            </div>
+                            <div>
+                                <label class="block text-sm text-slate-600 font-medium mb-2">Total Recettes</label>
+                                <p class="text-lg text-slate-900">{{ recipeCount }}</p>
+                            </div>
+                            <div>
+                                <label class="block text-sm text-slate-600 font-medium mb-2">Membre depuis</label>
+                                <p class="text-lg text-slate-900">
+                                    {% if app.user.dateCreation %}
+                                        {{ app.user.dateCreation|date('d/m/Y') }}
+                                    {% else %}
+                                        N/A
+                                    {% endif %}
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Stats -->
+                        <div class="bg-gradient-to-r from-[#006d37]/5 to-[#006d37]/10 rounded-lg p-6 mb-8">
+                            <h3 class="font-newsreader font-bold text-slate-900 mb-4">Statistiques</h3>
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <p class="text-sm text-slate-600">Vos recettes</p>
+                                    <p class="text-3xl font-bold text-[#006d37] mt-1">{{ recipeCount }}</p>
+                                </div>
+                                <div>
+                                    <p class="text-sm text-slate-600">Compte actif</p>
+                                    <p class="text-3xl font-bold text-[#006d37] mt-1">✓</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Actions -->
+                        <div class="flex flex-col gap-3">
+                            <a href="{{ path('app_chef_dashboard') }}" class="block w-full bg-[#006d37] text-white text-center font-medium py-3 rounded-lg hover:bg-[#005a2d] transition-colors">
+                                Mes Recettes
+                            </a>
+                            <a href="{{ path('app_tags_index') }}" class="block w-full bg-slate-100 text-slate-700 text-center font-medium py-3 rounded-lg hover:bg-slate-200 transition-colors">
+                                Voir les Étiquettes
+                            </a>
+                            <a href="{{ path('app_logout') }}" class="block w-full bg-red-100 text-red-700 text-center font-medium py-3 rounded-lg hover:bg-red-200 transition-colors">
+                                Déconnexion
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Edit Profile Card -->
+                    <div class="bg-white rounded-xl p-8 border border-slate-200 shadow-recipe">
+                        <h3 class="font-newsreader font-bold text-xl text-slate-900 mb-6">Modifier Mon Profil</h3>
+                        
+                        <p class="text-slate-600 mb-6">Pour modifier vos informations, accédez à vos paramètres de compte via le système de gestion des utilisateurs.</p>
+
+                        <div class="grid grid-cols-1 gap-4">
+                            <a href="{{ path('app_chef_dashboard') }}" class="inline-block bg-[#006d37] text-white text-center font-medium py-2 px-6 rounded-lg hover:bg-[#005a2d] transition-colors">
+                                Retour au Tableau de Bord
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>
+{% endblock %}

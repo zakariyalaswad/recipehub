@@ -1,13 +1,28 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Edit Recette{% endblock %}
+{% block title %}RecipeHub Admin - Recettes{% endblock %}
 
 {% block body %}
-    <h1>Edit Recette</h1>
+<main class="bg-background text-on-background min-h-screen flex-1 p-margin-desktop max-w-container-max mx-auto">
+    <header class="mb-10 text-center flex flex-col items-center">
+        <nav class="flex items-center text-on-surface-variant text-sm mb-4">
+            <span class="hover:text-primary cursor-pointer">Admin</span>
+            <span class="material-symbols-outlined text-sm mx-2">chevron_right</span>
+            <span class="hover:text-primary cursor-pointer">Recettes</span>
+            <span class="material-symbols-outlined text-sm mx-2">chevron_right</span>
+            <span class="text-primary font-bold">Modifier</span>
+        </nav>
+        <h2 class="font-headline-xl text-headline-xl text-on-background">Ajouter/Modifier une Recette</h2>
+        <p class="font-body-md text-on-surface-variant mt-2 max-w-2xl">Créez des recettes complètes avec leur catégorie, tags, image et contenu détaillé pour vos visiteurs.</p>
+    </header>
 
-    {{ include('recette/_form.html.twig', {'button_label': 'Update'}) }}
-
-    <a href="{{ path('app_recette_index') }}">back to list</a>
-
-    {{ include('recette/_delete_form.html.twig') }}
+    <div class="grid-cols-1 gap-gutter flex flex-col items-center">
+        <section class="bg-surface-container-lowest rounded-xl p-8 recipe-shadow w-full max-w-5xl">
+            {{ include('recette/_form.html.twig', {'button_label': 'Update'}) }}
+            <div class="mt-6">
+                {{ include('recette/_delete_form.html.twig') }}
+            </div>
+        </section>
+    </div>
+</main>
 {% endblock %}

@@ -1,4 +1,37 @@
-{{ form_start(form) }}
-    {{ form_widget(form) }}
-    <button class="btn">{{ button_label|default('Save') }}</button>
+{{ form_start(form, { attr: { class: 'space-y-8' } }) }}
+    {{ form_errors(form) }}
+
+    <div class="space-y-2">
+        {{ form_label(form.nom, 'Nom du tag', { label_attr: { class: 'font-label-md text-on-surface-variant block' } }) }}
+        {{ form_widget(form.nom, { attr: { class: 'w-full px-4 py-3 rounded-lg border border-outline-variant focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all font-body-md text-on-surface', placeholder: '#healthy' } }) }}
+        <p class="text-[12px] text-on-surface-variant opacity-60">Utilisez un nom court et facile à identifier.</p>
+    </div>
+
+    <div class="space-y-2">
+        {{ form_label(form.couleur, 'Couleur', { label_attr: { class: 'font-label-md text-on-surface-variant block' } }) }}
+        {{ form_widget(form.couleur, { attr: { class: 'w-full px-4 py-3 rounded-lg border border-outline-variant focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all font-body-md text-on-surface', placeholder: '#2ecc71' } }) }}
+        <p class="text-[12px] text-on-surface-variant opacity-60">Format attendu: hexadécimal, par exemple #2ecc71.</p>
+    </div>
+
+    <div class="space-y-4">
+        {{ form_label(form.recettes, 'Recettes liées', { label_attr: { class: 'font-label-md text-on-surface-variant block' } }) }}
+        <div class="grid gap-3 rounded-2xl border border-outline-variant bg-surface-container-low p-4 max-h-72 overflow-auto">
+            {% for recipeChoice in form.recettes %}
+                <label class="flex items-center gap-3 rounded-xl bg-white px-4 py-3 border border-outline-variant/40 hover:border-primary transition-colors cursor-pointer">
+                    {{ form_widget(recipeChoice, { attr: { class: 'h-5 w-5 rounded border-outline-variant text-primary focus:ring-primary' } }) }}
+                    <span class="text-sm text-on-surface font-body-md">{{ recipeChoice.vars.label }}</span>
+                </label>
+            {% endfor %}
+        </div>
+        <p class="text-[12px] text-on-surface-variant opacity-60">Cochez les recettes qui utilisent ce tag.</p>
+    </div>
+
+    <div class="pt-6 flex items-center gap-4 border-t border-outline-variant">
+        <button class="px-8 py-3 bg-secondary text-on-primary rounded-lg font-label-md hover:bg-primary transition-colors active:scale-95 shadow-lg shadow-primary/20" type="submit">
+            {{ button_label|default('Enregistrer') }}
+        </button>
+        <a class="px-8 py-3 bg-surface-container-high text-on-surface rounded-lg font-label-md hover:bg-surface-dim transition-colors active:scale-95" href="{{ path('app_tag_recette_index') }}">
+            Annuler
+        </a>
+    </div>
 {{ form_end(form) }}

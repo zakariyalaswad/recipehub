@@ -1,62 +1,198 @@
-{% extends 'base.html.twig' %}
+{% extends "base.html.twig" %}
 
-{% block title %}Recette{% endblock %}
+{% block title %}{{ recette.titre }} - RecipeHub{% endblock %}
 
 {% block body %}
-    <h1>Recette</h1>
+<div class="min-h-screen bg-slate-50">
+    <!-- Header -->
+    <div class="bg-white border-b border-slate-200 p-6 sticky top-0 z-10">
+        <div class="max-w-6xl mx-auto">
+            <div class="flex items-center justify-between">
+                <div>
+                    <a href="{{ path('app_home') }}" class="text-[#006d37] hover:underline text-sm mb-2 inline-block">← RecipeHub</a>
+                    <h1 class="text-3xl font-newsreader font-bold text-slate-900">{{ recette.titre }}</h1>
+                </div>
+                <div class="flex gap-2">
+                    {% if recette.auteur and recette.auteur.id == app.user.id %}
+                        <a href="{{ path('app_recette_edit', {'id': recette.id}) }}" class="bg-[#006d37] text-white px-4 py-2 rounded-lg hover:bg-[#005a2d] transition-colors inline-flex items-center gap-2">
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25z"/>
+                            </svg>
+                            Modifier
+                        </a>
+                        <form method="POST" action="{{ path('app_recette_delete', {'id': recette.id}) }}" class="inline" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cette recette ?');">
+                            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ recette.id) }}">
+                            <button type="submit" class="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition-colors inline-flex items-center gap-2">
+                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-9l-1 1H5v2h14V4z"/>
+                                </svg>
+                                Supprimer
+                            </button>
+                        </form>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
 
-    <table class="table">
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ recette.id }}</td>
-            </tr>
-            <tr>
-                <th>Titre</th>
-                <td>{{ recette.titre }}</td>
-            </tr>
-            <tr>
-                <th>Description</th>
-                <td>{{ recette.description }}</td>
-            </tr>
-            <tr>
-                <th>Instructions</th>
-                <td>{{ recette.instructions }}</td>
-            </tr>
-            <tr>
-                <th>TempsPreparation</th>
-                <td>{{ recette.tempsPreparation }}</td>
-            </tr>
-            <tr>
-                <th>TempsCuisson</th>
-                <td>{{ recette.tempsCuisson }}</td>
-            </tr>
-            <tr>
-                <th>Difficulte</th>
-                <td>{{ recette.difficulte }}</td>
-            </tr>
-            <tr>
-                <th>NbPersonnes</th>
-                <td>{{ recette.nbPersonnes }}</td>
-            </tr>
-            <tr>
-                <th>DateCreation</th>
-                <td>{{ recette.dateCreation ? recette.dateCreation|date('Y-m-d H:i:s') : '' }}</td>
-            </tr>
-            <tr>
-                <th>Publiee</th>
-                <td>{{ recette.publiee ? 'Yes' : 'No' }}</td>
-            </tr>
-            <tr>
-                <th>ImageName</th>
-                <td>{{ recette.imageName }}</td>
-            </tr>
-        </tbody>
-    </table>
+    <!-- Main Content -->
+    <main class="max-w-6xl mx-auto py-8 px-6">
+        <div class="grid grid-cols-3 gap-8 mb-12">
+            <!-- Left Column: Image & Info -->
+            <div class="col-span-2">
+                <!-- Image -->
+                <div class="rounded-xl overflow-hidden h-96 bg-gradient-to-br from-[#006d37]/5 to-[#006d37]/10 mb-8 shadow-recipe">
+                    {% if recette.imageName %}
+                        <img src="/uploads/recettes/{{ recette.imageName }}" alt="{{ recette.titre }}" class="w-full h-full object-cover">
+                    {% else %}
+                        <div class="w-full h-full flex items-center justify-center">
+                            <svg class="w-24 h-24 text-[#006d37]/20" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/>
+                            </svg>
+                        </div>
+                    {% endif %}
+                </div>
 
-    <a href="{{ path('app_recette_index') }}">back to list</a>
+                <!-- Description -->
+                <div class="bg-white rounded-xl p-6 border border-slate-200 shadow-recipe mb-8">
+                    <h2 class="font-newsreader font-bold text-2xl text-slate-900 mb-4">Description</h2>
+                    <p class="text-slate-700 leading-relaxed text-lg">{{ recette.description }}</p>
+                </div>
 
-    <a href="{{ path('app_recette_edit', {'id': recette.id}) }}">edit</a>
+                <!-- Instructions -->
+                {% if recette.instructions %}
+                    <div class="bg-white rounded-xl p-6 border border-slate-200 shadow-recipe mb-8">
+                        <h2 class="font-newsreader font-bold text-2xl text-slate-900 mb-6">Instructions</h2>
+                        <div class="prose prose-lg max-w-none">
+                            {% set instructions = recette.instructions|split('\\n') %}
+                            <ol class="list-decimal list-inside space-y-4">
+                                {% for instruction in instructions %}
+                                    {% if instruction|trim %}
+                                        <li class="text-slate-700 leading-relaxed">{{ instruction|trim }}</li>
+                                    {% endif %}
+                                {% endfor %}
+                            </ol>
+                        </div>
+                    </div>
+                {% endif %}
 
-    {{ include('recette/_delete_form.html.twig') }}
+                <!-- Tags -->
+                {% if recette.tags is not empty %}
+                    <div class="bg-white rounded-xl p-6 border border-slate-200 shadow-recipe">
+                        <h2 class="font-newsreader font-bold text-2xl text-slate-900 mb-4">Étiquettes</h2>
+                        <div class="flex flex-wrap gap-3">
+                            {% for tag in recette.tags %}
+                                <span class="inline-block bg-slate-100 text-slate-700 font-medium px-4 py-2 rounded-full">
+                                    {{ tag.nom }}
+                                </span>
+                            {% endfor %}
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+
+            <!-- Right Sidebar -->
+            <div class="col-span-1">
+                <!-- Timing Card -->
+                <div class="bg-white rounded-xl p-6 border border-slate-200 shadow-recipe mb-6">
+                    <h3 class="font-newsreader font-bold text-lg text-slate-900 mb-4">Temps</h3>
+                    <div class="space-y-3">
+                        {% if recette.tempsPreparation %}
+                            <div class="flex items-center gap-3">
+                                <svg class="w-5 h-5 text-[#006d37]" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm3.5-9c0 .83-.67 1.5-1.5 1.5s-1.5-.67-1.5-1.5.67-1.5 1.5-1.5 1.5.67 1.5 1.5z"/>
+                                </svg>
+                                <div>
+                                    <p class="text-sm text-slate-600">Préparation</p>
+                                    <p class="font-bold text-slate-900">{{ recette.tempsPreparation }} min</p>
+                                </div>
+                            </div>
+                        {% endif %}
+                        {% if recette.tempsCuisson %}
+                            <div class="flex items-center gap-3">
+                                <svg class="w-5 h-5 text-[#006d37]" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M13 5h8v8h-8V5zm0 10h8v8h-8v-8zM3 5h8v8H3V5zm0 10h8v8H3v-8z"/>
+                                </svg>
+                                <div>
+                                    <p class="text-sm text-slate-600">Cuisson</p>
+                                    <p class="font-bold text-slate-900">{{ recette.tempsCuisson }} min</p>
+                                </div>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <!-- Recipe Info Card -->
+                <div class="bg-white rounded-xl p-6 border border-slate-200 shadow-recipe mb-6">
+                    <h3 class="font-newsreader font-bold text-lg text-slate-900 mb-4">Infos Recette</h3>
+                    <div class="space-y-3">
+                        {% if recette.nbPersonnes %}
+                            <div>
+                                <p class="text-sm text-slate-600">Nombre de personnes</p>
+                                <p class="font-bold text-slate-900">{{ recette.nbPersonnes }} personnes</p>
+                            </div>
+                        {% endif %}
+                        {% if recette.difficulte %}
+                            <div>
+                                <p class="text-sm text-slate-600">Difficulté</p>
+                                <p class="font-bold text-slate-900">
+                                    {% if recette.difficulte == 'facile' %}
+                                        <span class="text-green-600">✓ Facile</span>
+                                    {% elseif recette.difficulte == 'moyen' %}
+                                        <span class="text-yellow-600">⭐ Moyen</span>
+                                    {% elseif recette.difficulte == 'difficile' %}
+                                        <span class="text-red-600">🔴 Difficile</span>
+                                    {% endif %}
+                                </p>
+                            </div>
+                        {% endif %}
+                        {% if recette.categorie %}
+                            <div>
+                                <p class="text-sm text-slate-600">Catégorie</p>
+                                <p class="font-bold text-slate-900">{{ recette.categorie.nom }}</p>
+                            </div>
+                        {% endif %}
+                        {% if recette.publiee %}
+                            <div>
+                                <span class="inline-block bg-green-100 text-green-700 text-xs font-medium px-3 py-1 rounded-full">
+                                    Publiée
+                                </span>
+                            </div>
+                        {% else %}
+                            <div>
+                                <span class="inline-block bg-yellow-100 text-yellow-700 text-xs font-medium px-3 py-1 rounded-full">
+                                    Brouillon
+                                </span>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <!-- Author Card -->
+                <div class="bg-white rounded-xl p-6 border border-slate-200 shadow-recipe mb-6">
+                    <h3 class="font-newsreader font-bold text-lg text-slate-900 mb-4">Cuisinier</h3>
+                    <div class="flex items-center gap-4">
+                        <div class="w-12 h-12 rounded-full bg-gradient-to-br from-[#006d37] to-[#004d28] flex items-center justify-center text-white font-bold">
+                            {{ recette.auteur.pseudo|slice(0, 2)|upper }}
+                        </div>
+                        <div>
+                            <p class="font-bold text-slate-900">{{ recette.auteur.pseudo }}</p>
+                            <p class="text-sm text-slate-600">{{ recette.auteur.email }}</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Navigation -->
+                <div class="flex gap-2">
+                    <a href="{{ path('app_home') }}" class="flex-1 bg-slate-100 text-slate-700 text-center font-medium py-2 rounded-lg hover:bg-slate-200 transition-colors">
+                        Accueil
+                    </a>
+                    <a href="{{ path('app_chef_dashboard') }}" class="flex-1 bg-[#006d37] text-white text-center font-medium py-2 rounded-lg hover:bg-[#005a2d] transition-colors">
+                        Tableau de Bord
+                    </a>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
 {% endblock %}

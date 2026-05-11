@@ -1,4 +1,28 @@
-{{ form_start(form) }}
-    {{ form_widget(form) }}
-    <button class="btn">{{ button_label|default('Save') }}</button>
+{{ form_start(form, { attr: { class: 'space-y-8' } }) }}
+    {{ form_errors(form) }}
+
+    <div class="space-y-2">
+        {{ form_label(form.nom, 'Nom de l’ingrédient', { label_attr: { class: 'font-label-md text-on-surface-variant block' } }) }}
+        {{ form_widget(form.nom, { attr: { class: 'w-full px-4 py-3 rounded-lg border border-outline-variant focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all font-body-md text-on-surface', placeholder: 'Farine' } }) }}
+    </div>
+
+    <div class="space-y-2">
+        {{ form_label(form.quantite, 'Quantité', { label_attr: { class: 'font-label-md text-on-surface-variant block' } }) }}
+        {{ form_widget(form.quantite, { attr: { class: 'w-full px-4 py-3 rounded-lg border border-outline-variant focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all font-body-md text-on-surface', placeholder: '200 g' } }) }}
+    </div>
+
+    <div class="space-y-2">
+        {{ form_label(form.recette, 'Recette liée', { label_attr: { class: 'font-label-md text-on-surface-variant block' } }) }}
+        {{ form_widget(form.recette, { attr: { class: 'w-full px-4 py-3 rounded-lg border border-outline-variant focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all font-body-md text-on-surface' } }) }}
+        <p class="text-[12px] text-on-surface-variant opacity-60">Choisissez la recette à laquelle cet ingrédient appartient.</p>
+    </div>
+
+    <div class="pt-6 flex items-center gap-4 border-t border-outline-variant">
+        <button class="px-8 py-3 bg-secondary text-on-primary rounded-lg font-label-md hover:bg-primary transition-colors active:scale-95 shadow-lg shadow-primary/20" type="submit">
+            {{ button_label|default('Enregistrer') }}
+        </button>
+        <a class="px-8 py-3 bg-surface-container-high text-on-surface rounded-lg font-label-md hover:bg-surface-dim transition-colors active:scale-95" href="{{ path('app_ingredient_index') }}">
+            Annuler
+        </a>
+    </div>
 {{ form_end(form) }}

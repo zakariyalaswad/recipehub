@@ -1,11 +1,25 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}New TagRecette{% endblock %}
+{% block title %}RecipeHub Admin - Tags{% endblock %}
 
 {% block body %}
-    <h1>Create new TagRecette</h1>
+<main class="bg-background text-on-background min-h-screen flex-1 p-margin-desktop max-w-container-max mx-auto">
+    <header class="mb-10 text-center flex flex-col items-center">
+        <nav class="flex items-center text-on-surface-variant text-sm mb-4">
+            <span class="hover:text-primary cursor-pointer">Admin</span>
+            <span class="material-symbols-outlined text-sm mx-2">chevron_right</span>
+            <span class="hover:text-primary cursor-pointer">Tags</span>
+            <span class="material-symbols-outlined text-sm mx-2">chevron_right</span>
+            <span class="text-primary font-bold">Nouveau</span>
+        </nav>
+        <h2 class="font-headline-xl text-headline-xl text-on-background">Ajouter/Modifier un Tag</h2>
+        <p class="font-body-md text-on-surface-variant mt-2 max-w-2xl">Associez des tags aux recettes pour enrichir la recherche et mettre en avant des thèmes culinaires précis.</p>
+    </header>
 
-    {{ include('tag_recette/_form.html.twig') }}
-
-    <a href="{{ path('app_tag_recette_index') }}">back to list</a>
+    <div class="grid-cols-1 gap-gutter flex flex-col items-center">
+        <section class="bg-surface-container-lowest rounded-xl p-8 recipe-shadow w-full max-w-3xl">
+            {{ include('tag_recette/_form.html.twig') }}
+        </section>
+    </div>
+</main>
 {% endblock %}
