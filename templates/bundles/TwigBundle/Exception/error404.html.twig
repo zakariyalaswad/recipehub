@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>RecipeHub - Page Not Found</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;600;700&family=Newsreader:opsz,wght@6..72,600;6..72,700&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        'on-background': '#161d1f',
+                        'surface': '#f4fafd',
+                        'surface-bright': '#f4fafd',
+                        'on-tertiary-fixed': '#191c1b',
+                        'outline': '#6c7b6d',
+                        'outline-variant': '#bbcbbb',
+                        'on-tertiary-fixed-variant': '#444746',
+                        'surface-container-high': '#e2e9ec',
+                        'on-secondary-container': '#007239',
+                        'primary-container': '#2ecc71',
+                        'error': '#ba1a1a',
+                        'on-error': '#ffffff',
+                        'tertiary': '#5c5f5e',
+                        'on-surface': '#161d1f',
+                        'secondary-container': '#7bf8a1',
+                        'surface-tint': '#006d37',
+                        'on-primary-fixed-variant': '#005228',
+                        'on-surface-variant': '#3d4a3e',
+                        'surface-variant': '#dde4e6',
+                        'primary-fixed': '#6bfe9c',
+                        'surface-container-highest': '#dde4e6',
+                        'inverse-surface': '#2b3234',
+                        'inverse-on-surface': '#ebf2f4',
+                        'tertiary-fixed': '#e1e3e1',
+                        'on-tertiary': '#ffffff',
+                        'surface-container': '#e8eff1',
+                        'on-error-container': '#93000a',
+                        'on-secondary-fixed-variant': '#005228',
+                        'surface-container-lowest': '#ffffff',
+                        'on-primary': '#ffffff',
+                        'on-primary-fixed': '#00210c',
+                        'secondary': '#006d37',
+                        'surface-container-low': '#eef5f7',
+                        'primary': '#006d37',
+                        'on-secondary': '#ffffff',
+                        'secondary-fixed-dim': '#61de8a',
+                        'on-primary-container': '#005027',
+                        'on-tertiary-container': '#424644',
+                        'tertiary-fixed-dim': '#c5c7c5'
+                    },
+                    borderRadius: {
+                        DEFAULT: '0.25rem',
+                        lg: '0.5rem',
+                        xl: '0.75rem',
+                        full: '9999px'
+                    },
+                    spacing: {
+                        unit: '8px',
+                        'container-max': '1200px',
+                        gutter: '24px',
+                        'margin-mobile': '16px',
+                        'margin-desktop': '40px'
+                    },
+                    fontFamily: {
+                        'body-md': ['Be Vietnam Pro'],
+                        'headline-lg-mobile': ['Newsreader'],
+                        'body-lg': ['Be Vietnam Pro'],
+                        'headline-md': ['Newsreader'],
+                        'label-md': ['Be Vietnam Pro'],
+                        'headline-lg': ['Newsreader'],
+                        'headline-xl': ['Newsreader']
+                    },
+                    fontSize: {
+                        'body-md': ['16px', { lineHeight: '24px', fontWeight: '400' }],
+                        'headline-lg-mobile': ['28px', { lineHeight: '36px', fontWeight: '600' }],
+                        'body-lg': ['18px', { lineHeight: '28px', fontWeight: '400' }],
+                        'headline-md': ['24px', { lineHeight: '32px', fontWeight: '600' }],
+                        'label-md': ['14px', { lineHeight: '20px', letterSpacing: '0.02em', fontWeight: '600' }],
+                        'headline-lg': ['32px', { lineHeight: '40px', fontWeight: '600' }],
+                        'headline-xl': ['48px', { lineHeight: '56px', fontWeight: '700' }]
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .recipe-shadow {
+            box-shadow: 0 4px 20px rgba(46, 204, 113, 0.08);
+        }
+    </style>
+</head>
+<body class="bg-surface text-on-surface font-body-md min-h-screen flex flex-col">
+    <header class="bg-surface dark:bg-background shadow-[0_4px_20px_rgba(46,204,113,0.08)] sticky top-0 z-50">
+        <nav class="flex justify-between items-center w-full px-margin-desktop h-20 max-w-container-max mx-auto">
+            <a href="{{ path('app_home') }}" class="font-headline-lg text-headline-lg font-bold text-primary dark:text-primary-fixed-dim hover:opacity-80 transition-opacity">RecipeHub</a>
+        </nav>
+    </header>
+
+    <main class="flex-1 flex items-center justify-center px-margin-mobile py-12">
+        <div class="max-w-2xl w-full text-center">
+            <!-- 404 Illustration -->
+            <div class="mb-8">
+                <div class="inline-block relative">
+                    <div class="text-9xl font-headline-xl text-error opacity-20 mb-4">404</div>
+                    <div class="absolute inset-0 flex items-center justify-center">
+                        <span class="material-symbols-outlined text-8xl text-error opacity-40">search_off</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Content -->
+            <div class="space-y-6">
+                <h1 class="font-headline-xl text-headline-xl text-on-surface">Oops! Recipe Not Found</h1>
+                
+                <p class="text-body-lg text-on-surface-variant max-w-md mx-auto">
+                    The page you're looking for has disappeared like a soufflé in the oven. It might have been moved, deleted, or never existed in the first place.
+                </p>
+
+                <!-- Status Code and Path (for debugging) -->
+                <div class="bg-surface-container-low rounded-lg p-4 mt-8 text-left">
+                    <p class="text-label-md text-on-surface-variant font-mono">
+                        <span class="font-bold">Status:</span> {{ status_code }}
+                    </p>
+                    {% if status_text %}
+                        <p class="text-label-md text-on-surface-variant font-mono">
+                            <span class="font-bold">Message:</span> {{ status_text }}
+                        </p>
+                    {% endif %}
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="flex flex-col sm:flex-row items-center justify-center gap-4 mt-12">
+                    <a href="{{ path('app_home') }}" class="px-8 py-3 bg-primary text-on-primary rounded-xl font-label-md hover:scale-105 transition-transform duration-200 inline-flex items-center gap-2">
+                        <span class="material-symbols-outlined">home</span>
+                        Back to Home
+                    </a>
+                    <a href="{{ path('app_login') }}" class="px-8 py-3 bg-secondary-container text-on-secondary-container rounded-xl font-label-md hover:scale-105 transition-transform duration-200 inline-flex items-center gap-2">
+                        <span class="material-symbols-outlined">login</span>
+                        Go to Login
+                    </a>
+                </div>
+
+                <!-- Decorative Elements -->
+                <div class="mt-16 flex justify-center gap-4">
+                    <div class="w-16 h-16 bg-primary-container/20 rounded-full blur-lg"></div>
+                    <div class="w-20 h-20 bg-secondary-container/20 rounded-full blur-lg"></div>
+                    <div class="w-16 h-16 bg-primary-container/20 rounded-full blur-lg"></div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="bg-surface-container-low border-t border-outline-variant/20 py-8 mt-auto">
+        <div class="max-w-container-max mx-auto px-margin-desktop text-center">
+            <p class="text-on-surface-variant text-label-md">
+                RecipeHub © 2026. Sharing delicious recipes, one error page at a time.
+            </p>
+        </div>
+    </footer>
+</body>
+</html>

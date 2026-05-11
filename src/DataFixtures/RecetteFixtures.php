@@ -17,7 +17,6 @@ class RecetteFixtures extends Fixture implements DependentFixtureInterface
     {
         $faker = Factory::create();
 
-        $users = $manager->getRepository(\App\Entity\User::class)->findAll();
         $categories = $manager->getRepository(\App\Entity\CategorieRecette::class)->findAll();
 
         $difficultes = ['facile', 'moyen', 'difficile'];
@@ -36,7 +35,7 @@ class RecetteFixtures extends Fixture implements DependentFixtureInterface
             $recette->setDateCreation(new \DateTime());
             $recette->setPubliee(true);
 
-            $recette->setAuteur($faker->randomElement($users));
+            $recette->setAuteur($this->getReference('user_chef', User::class));
             $recette->setCategorie($faker->randomElement($categories));
 
             // TAGS

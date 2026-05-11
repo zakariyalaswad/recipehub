@@ -2,47 +2,95 @@
 
 namespace App\Controller;
 
+use App\Repository\CategorieRecetteRepository;
+use App\Repository\RecetteRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
 final class HomeController extends AbstractController
 {
     #[Route('/', name: 'app_home', methods: ['GET'])]
-    public function index(): Response
+    public function index(
+        Request $request,
+        RecetteRepository $recetteRepository,
+        CategorieRecetteRepository $categorieRecetteRepository,
+    ): Response
     {
+        $search = trim((string) $request->query->get('search', ''));
+        $categorieId = $request->query->get('categorie');
+        $page = max(1, (int) $request->query->get('page', 1));
+        $limit = 6;
+
+        // Build featured recipe (static for now)
+        $featuredRecipe = [
+            'title' => 'Chocolate and peanut butter overnight oats',
+            'image' => 'https://lh3.googleusercontent.com/aida-public/AB6AXuAFxM9PKX5rqx_fXr6yeZm69ZCqmAWuJNkCMHh3qE1SP8l1aEbwubV52l8ynyk9PAUB9XlC-1YioBbg33k3KTP-jNX9GuSwqQBh2IPX8w1pdB9C4j34OGcIU8fnpnWImbCsq_QkqZbN-OsUeakB-VmegZiO-bsXju3AnGER9K8dq0oMQK5UwFfefM4A5rGGajLAs5WBoE6skq1J7WR2VwNFrNPdWVEIJnOmg88nNPQ8kD-xo8TVE3dGoDnwA6AnKGnGp1rMnfApAVg',
+            'badge' => 'Featured Recipe',
+            'prepTime' => '10m Prep',
+            'servings' => '1 Serving',
+            'calories' => '200 kcal',
+        ];
+
+        $ingredients = [
+            '45g rolled oats',
+            '40g soya yogurt',
+            '15g peanut butter',
+            '10g chia seeds',
+            '5g cocoa powder',
+            '150ml unsweetened almond milk',
+        ];
+
+        // Build query for recipes with search and category filters
+        $queryBuilder = $recetteRepository->createQueryBuilder('r')
+            ->leftJoin('r.categorie', 'c')->addSelect('c')
+            ->leftJoin('r.auteur', 'a')->addSelect('a')
+            ->leftJoin('r.ingredients', 'ing')->addSelect('ing')
+            ->leftJoin('r.tags', 't')->addSelect('t')
+            ->where('r.publiee = true')
+            ->orderBy('r.dateCreation', 'DESC')
+            ->addOrderBy('r.id', 'DESC');
+
+        if ($search !== '') {
+            $searchLower = '%' . mb_strtolower($search) . '%';
+            $queryBuilder
+                ->andWhere('LOWER(r.titre) LIKE :search 
+                    OR LOWER(r.description) LIKE :search 
+                    OR LOWER(a.pseudo) LIKE :search 
+                    OR LOWER(a.email) LIKE :search
+                    OR LOWER(ing.nom) LIKE :search
+                    OR LOWER(t.nom) LIKE :search')
+                ->setParameter('search', $searchLower);
+        }
+
+        if ($categorieId !== null && $categorieId !== '') {
+            $queryBuilder
+                ->andWhere('c.id = :categorieId')
+                ->setParameter('categorieId', (int) $categorieId);
+        }
+
+        // Count total recipes
+        $countQueryBuilder = clone $queryBuilder;
+        $totalRecipes = (int) $countQueryBuilder
+            ->select('COUNT(DISTINCT r.id)')
+            ->getQuery()
+            ->getSingleScalarResult();
+
+        $totalPages = max(1, (int) ceil($totalRecipes / $limit));
+        $page = min($page, $totalPages);
+
+        // Get paginated recipes
+        $recipes = $queryBuilder
+            ->setFirstResult(($page - 1) * $limit)
+            ->setMaxResults($limit)
+            ->getQuery()
+            ->getResult();
+
         return $this->render('home/index.html.twig', [
-            'featuredRecipe' => [
-                'title' => 'Chocolate and peanut butter overnight oats',
-                'image' => 'https://lh3.googleusercontent.com/aida-public/AB6AXuAFxM9PKX5rqx_fXr6yeZm69ZCqmAWuJNkCMHh3qE1SP8l1aEbwubV52l8ynyk9PAUB9XlC-1YioBbg33k3KTP-jNX9GuSwqQBh2IPX8w1pdB9C4j34OGcIU8fnpnWImbCsq_QkqZbN-OsUeakB-VmegZiO-bsXju3AnGER9K8dq0oMQK5UwFfefM4A5rGGajLAs5WBoE6skq1J7WR2VwNFrNPdWVEIJnOmg88nNPQ8kD-xo8TVE3dGoDnwA6AnKGnGp1rMnfApAVg',
-                'badge' => 'Featured Recipe',
-                'prepTime' => '10m Prep',
-                'servings' => '1 Serving',
-                'calories' => '200 kcal',
-            ],
-            'ingredients' => [
-                '45g rolled oats',
-                '40g soya yogurt',
-                '15g peanut butter',
-                '10g chia seeds',
-                '5g cocoa powder',
-                '150ml unsweetened almond milk',
-            ],
-            'utensils' => [
-                [
-                    'name' => 'Food container',
-                    'image' => 'https://lh3.googleusercontent.com/aida-public/AB6AXuCwvyJ-35ldWEWdKC80pdh8Hk4uIOugcLx1zyWmeS9COGNJ5mn12aCg2UEfYViuOwUx9E4Xp0kXsYLbvP7_GyK4IcFppo6WVeXXo_3VXom4Z9gYfxsAg0gzMAmwUL1VFavDk09419Gmyi0cUovIxIye7NfP66D3bjYvYY_saGxm45qzZ6KNRpUS4EaTnacw-WLL7QL7Iv0BKQ1cTiJmlhrA8-twGw-XbAGyRmsUvEDST5yT6GP1ow-cKmwYH_gpdwhirsXsd0jRqAY',
-                ],
-                [
-                    'name' => 'Kitchen scale',
-                    'image' => 'https://lh3.googleusercontent.com/aida-public/AB6AXuCBDrnfNHGLIZA3Z0Ga9ESDD1945NFuuGVdn6IZXaxovFRP6tgXRqUmLiUl-8l_7eJuNmi3wGW9bYIrN0Gu7vmHtnn3OyIJ9nXJEK2irHmD8tlbv7N0HglJbn0-xsqW4Sx8y1n5oK_o5v8W9-s8uhuIfkwC8Sow5_OjA86LaLeXw9D9E3Hzh59KdpdmPZjAf99a_lVNVL0IAnKXTdJKK4zhQXH3G9aVrOPKhIn3w_hHj-AxJYKzdYEszGxxSdT6UBKrHpBTpfFoKjU',
-                ],
-                [
-                    'name' => 'Measuring jug',
-                    'image' => 'https://lh3.googleusercontent.com/aida-public/AB6AXuDvFm6W_3SrGPl_HHzrjWuqe-fWSxulCCGu3VNnsncHnvCiZpR745LQJFwh9Z5rdTIa7wUAP5eeoY6lu_mJbGDnl6zahg74cRZcaZwKBLNJihx8ZYlXdfvzWgDBO6XIVXNH-MBpOioNQSEdGqPBJWtN27_YnbTk2EiNaM5HK-U783A7Vhxw3BW4dbKWQQxJ2or2JBErnDQ1KsGitflGraEwIQCL7LXva40ipu3Pao36hn9Umco-fQ-AiQYR_xufjbqU2NxZXtZiqdI',
-                ],
-            ],
-            'categories' => ['🥗 Vegan', '🕒 15-Min', '🥐 Breakfast', '🍜 Dinner'],
+            'featuredRecipe' => $featuredRecipe,
+            'ingredients' => $ingredients,
+            'categories' => $categorieRecetteRepository->findBy([], ['nom' => 'ASC']),
             'highlights' => [
                 ['icon' => 'eco', 'title' => 'Eco-Friendly', 'description' => 'Sustainable choices', 'class' => 'bg-tertiary-fixed'],
                 ['icon' => 'fitness_center', 'title' => 'High Protein', 'description' => 'Fuel your workout', 'class' => 'bg-primary-fixed'],
@@ -93,6 +141,14 @@ final class HomeController extends AbstractController
                     'time' => '10m Prep',
                 ],
             ],
+            'search' => $search,
+            'selectedCategory' => $categorieId !== null && $categorieId !== '' ? (int) $categorieId : null,
+            'recipes' => $recipes,
+            'page' => $page,
+            'totalPages' => $totalPages,
+            'totalRecipes' => $totalRecipes,
+            'from' => $totalRecipes === 0 ? 0 : (($page - 1) * $limit) + 1,
+            'to' => min($page * $limit, $totalRecipes),
         ]);
     }
 }

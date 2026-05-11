@@ -33,6 +33,7 @@ class UserFixtures extends Fixture
         $chef->setRoles(['ROLE_CUISINIER']);
         $chef->setPassword($this->hasher->hashPassword($chef, 'chef123'));
         $manager->persist($chef);
+        $this->addReference('user_chef', $chef);
 
         // Users fake
         for ($i = 0; $i < 5; $i++) {

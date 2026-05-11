@@ -114,20 +114,37 @@
     <div class="bg-surface text-on-surface font-body-md min-h-screen">
         <header class="bg-surface dark:bg-background shadow-[0_4px_20px_rgba(46,204,113,0.08)] sticky top-0 z-50">
             <nav class="flex justify-between items-center w-full px-margin-desktop h-20 max-w-container-max mx-auto">
-                <div class="font-headline-lg text-headline-lg font-bold text-primary dark:text-primary-fixed-dim">RecipeHub</div>
+                <a href="{{ path('app_home') }}" class="font-headline-lg text-headline-lg font-bold text-primary dark:text-primary-fixed-dim hover:opacity-80 transition-opacity">RecipeHub</a>
                 <div class="hidden md:flex items-center gap-8 font-body-md text-body-md tracking-tight">
                     <a class="text-primary dark:text-primary-fixed-dim font-bold border-b-2 border-primary pb-1" href="#browse">Browse</a>
-                    <a class="text-on-surface-variant dark:text-surface-variant hover:text-primary dark:hover:text-primary-fixed-dim transition-colors" href="#categories">Categories</a>
+                    <a class="text-on-surface-variant dark:text-surface-variant hover:text-primary dark:hover:text-primary-fixed-dim transition-colors" href="#recipes">Categories</a>
                     <a class="text-on-surface-variant dark:text-surface-variant hover:text-primary dark:hover:text-primary-fixed-dim transition-colors" href="#healthy">Healthy</a>
-                    <a class="text-on-surface-variant dark:text-surface-variant hover:text-primary dark:hover:text-primary-fixed-dim transition-colors" href="#quick-meals">Quick Meals</a>
                     <a class="text-on-surface-variant dark:text-surface-variant hover:text-primary dark:hover:text-primary-fixed-dim transition-colors" href="#seasonal">Seasonal</a>
                 </div>
                 <div class="flex items-center gap-4">
                     <div class="relative hidden lg:block">
-                        <input class="pl-10 pr-4 py-2 rounded-full border-outline-variant bg-surface-container-low focus:ring-primary focus:border-primary w-64 text-label-md" placeholder="Search for a recipe..." type="text"/>
-                        <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant">search</span>
+                        <form method="GET" action="{{ path('app_home') }}" class="flex items-center w-64">
+                            <input class="pl-10 pr-4 py-2 rounded-full border-outline-variant bg-surface-container-low focus:ring-primary focus:border-primary w-full text-label-md" placeholder="Search recipe, chef, tags..." type="text" name="search"/>
+                            <span class="material-symbols-outlined absolute left-3 text-on-surface-variant pointer-events-none">search</span>
+                        </form>
                     </div>
-                    <a class="px-6 py-2 rounded-xl bg-primary text-on-primary font-label-md hover:scale-105 transition-transform duration-200" href="#newsletter">Sign Up</a>
+                    {% if app.user %}
+                        <div class="flex items-center gap-3">
+                            <a href="{{ path('app_profile') }}" class="px-4 py-2 rounded-xl bg-secondary-container text-on-secondary-container font-label-md hover:scale-105 transition-transform duration-200 flex items-center gap-2">
+                                <span class="material-symbols-outlined text-[18px]">account_circle</span>
+                                <span class="hidden sm:inline">Profile</span>
+                            </a>
+                            <a href="{{ path('app_logout') }}" class="px-4 py-2 rounded-xl bg-surface-container-high text-on-surface-variant font-label-md hover:scale-105 transition-transform duration-200 flex items-center gap-2">
+                                <span class="material-symbols-outlined text-[18px]">logout</span>
+                                <span class="hidden sm:inline">Logout</span>
+                            </a>
+                        </div>
+                    {% else %}
+                        <div class="flex items-center gap-3">
+                            <a href="{{ path('app_login') }}" class="px-4 py-2 rounded-xl border-2 border-primary text-primary font-label-md hover:bg-primary hover:text-on-primary transition-colors duration-200">Sign In</a>
+                            <a href="{{ path('app_register') }}" class="px-6 py-2 rounded-xl bg-primary text-on-primary font-label-md hover:scale-105 transition-transform duration-200">Sign Up</a>
+                        </div>
+                    {% endif %}
                 </div>
             </nav>
         </header>
@@ -135,7 +152,6 @@
         {{ include('home/_recipe_detail.html.twig', {
             featuredRecipe: featuredRecipe,
             ingredients: ingredients,
-            utensils: utensils,
             categories: categories,
             highlights: highlights,
             instructions: instructions,
@@ -149,7 +165,7 @@
                     <h3 class="font-headline-md text-headline-md text-on-secondary-container">Popular Categories</h3>
                     <div class="flex flex-wrap gap-2 mt-4">
                         {% for category in categories %}
-                            <span class="bg-white/50 px-4 py-2 rounded-full text-label-md hover:bg-white transition-colors cursor-pointer">{{ category }}</span>
+                            <a href="{{ path('app_home', {'categorie': category.id, 'page': 1}) }}" class="bg-white/50 px-4 py-2 rounded-full text-label-md hover:bg-white transition-colors cursor-pointer">{{ category.nom }}</a>
                         {% endfor %}
                     </div>
                 </div>
@@ -202,6 +218,91 @@
                         </div>
                     </div>
                 </div>
+            </section>
+
+            <!-- Recipes with Search and Category Filter -->
+            <section class="mb-20" id="recipes">
+                <h2 class="font-headline-md text-headline-md mb-8">Browse All Recipes</h2>
+                
+                <!-- Category Filter -->
+                <div class="mb-8 flex flex-wrap gap-3">
+                    <a href="{{ path('app_home') }}" class="px-4 py-2 rounded-full {% if not selectedCategory %}bg-primary text-on-primary{% else %}bg-surface-container-low text-on-surface-variant hover:bg-surface-container-high{% endif %} font-label-md transition-colors">
+                        All Recipes
+                    </a>
+                    {% for category in categories %}
+                        <a href="{{ path('app_home', {'categorie': category.id, 'page': 1}) }}" class="px-4 py-2 rounded-full {% if selectedCategory == category.id %}bg-primary text-on-primary{% else %}bg-surface-container-low text-on-surface-variant hover:bg-surface-container-high{% endif %} font-label-md transition-colors">
+                            {{ category.nom }}
+                        </a>
+                    {% endfor %}
+                </div>
+
+                <!-- Search Form -->
+                {% if search != '' %}
+                    <div class="mb-6 p-4 bg-primary/10 rounded-lg flex items-center justify-between">
+                        <span class="text-on-surface font-label-md">Searching for: <strong>{{ search }}</strong></span>
+                        <a href="{{ path('app_home') }}" class="text-primary hover:text-primary-fixed-dim font-bold">Clear Search</a>
+                    </div>
+                {% endif %}
+
+                <!-- Recipes Grid -->
+                {% if recipes|length > 0 %}
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+                        {% for recipe in recipes %}
+                            {% set imageUrl = recipe.imageName ? asset('uploads/recettes/' ~ recipe.imageName) : 'https://lh3.googleusercontent.com/aida-public/AB6AXuDFHS-KtAd8IhUzX49GVSQXPyswnXVgUhLUDy-EUAXXY-Z5HDXL2oLvdz4SQfgqeYazfHNq1FxQ4Eiexq0ewCQw9LEqMifymygbH_JbPmFCSyRMBIH879iEjcHckcZhhk4bs5b3hc28Bfz1oWjGe0eW6caTIrbnaUFnEn17sGfwsp6SMFYvclmnSFXXp_qciZcpdTgVQd5dzg9iOfg0nW9x2rXB1Y9fHjsPntjyg8i_XilMlfMawSB1XqoaMn_lRDCpoNowoNNzWvU' %}
+                            <a href="{{ path('app_recette_show', {'id': recipe.id}) }}" class="bg-white rounded-2xl overflow-hidden recipe-shadow hover:-translate-y-1 transition-transform group cursor-pointer">
+                                <div class="relative h-48 overflow-hidden bg-surface-container-low">
+                                    <img class="w-full h-full object-cover group-hover:scale-110 transition-transform" alt="{{ recipe.titre }}" src="{{ imageUrl }}"/>
+                                    <div class="absolute top-3 right-3 bg-primary text-on-primary px-3 py-1 rounded-full text-label-md font-bold">
+                                        {{ recipe.categorie.nom }}
+                                    </div>
+                                </div>
+                                <div class="p-4">
+                                    <h3 class="font-bold text-on-surface mb-2 group-hover:text-primary transition-colors">{{ recipe.titre }}</h3>
+                                    <p class="text-sm text-on-surface-variant mb-3 line-clamp-2">{{ recipe.description }}</p>
+                                    <div class="flex items-center justify-between text-label-md text-on-surface-variant">
+                                        <span class="flex items-center gap-1">
+                                            <span class="material-symbols-outlined text-sm">schedule</span>
+                                            {{ recipe.tempsPreparation }}m
+                                        </span>
+                                        <span class="flex items-center gap-1">
+                                            <span class="material-symbols-outlined text-sm">group</span>
+                                            {{ recipe.nbPersonnes }}
+                                        </span>
+                                    </div>
+                                    <div class="mt-3 flex flex-wrap gap-1">
+                                        {% for tag in recipe.tags|slice(0, 2) %}
+                                            <span class="bg-secondary-container text-on-secondary-container px-2 py-1 rounded text-xs font-bold">{{ tag.nom }}</span>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            </a>
+                        {% endfor %}
+                    </div>
+
+                    <!-- Pagination -->
+                    {% if totalPages > 1 %}
+                        <div class="flex items-center justify-between mb-8">
+                            <span class="font-label-md text-on-surface-variant">Showing {{ from }}-{{ to }} of {{ totalRecipes }} recipes</span>
+                            <div class="flex items-center gap-2">
+                                <a href="{{ page > 1 ? path('app_home', app.request.query.all|merge({'page': page - 1})) : '#' }}" class="p-2 rounded-lg border border-outline-variant hover:bg-surface-container-high transition-colors {% if page == 1 %}opacity-30 pointer-events-none{% endif %}">
+                                    <span class="material-symbols-outlined" data-icon="chevron_left">chevron_left</span>
+                                </a>
+                                {% for pageNumber in 1..totalPages %}
+                                    <a href="{{ path('app_home', app.request.query.all|merge({'page': pageNumber})) }}" class="w-10 h-10 rounded-lg {% if pageNumber == page %}bg-primary text-on-primary font-bold{% else %}hover:bg-surface-container-high text-on-surface-variant{% endif %} transition-colors flex items-center justify-center">{{ pageNumber }}</a>
+                                {% endfor %}
+                                <a href="{{ page < totalPages ? path('app_home', app.request.query.all|merge({'page': page + 1})) : '#' }}" class="p-2 rounded-lg border border-outline-variant hover:bg-surface-container-high transition-colors {% if page == totalPages %}opacity-30 pointer-events-none{% endif %}">
+                                    <span class="material-symbols-outlined" data-icon="chevron_right">chevron_right</span>
+                                </a>
+                            </div>
+                        </div>
+                    {% endif %}
+                {% else %}
+                    <div class="text-center py-12 bg-surface-container-low rounded-2xl">
+                        <span class="material-symbols-outlined text-6xl text-on-surface-variant mb-4 block">search_off</span>
+                        <p class="text-on-surface-variant text-body-lg">No recipes found matching your criteria.</p>
+                        <a href="{{ path('app_home') }}" class="mt-4 inline-block px-6 py-2 bg-primary text-on-primary rounded-xl font-label-md hover:scale-105 transition-transform">View All Recipes</a>
+                    </div>
+                {% endif %}
             </section>
 
             <section id="newsletter" class="bg-on-secondary-container text-white rounded-[40px] p-12 lg:p-20 relative overflow-hidden mb-20">

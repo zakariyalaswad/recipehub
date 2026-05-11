@@ -9,7 +9,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
-#[IsGranted('ROLE_USER')]
+#[IsGranted('ROLE_CUISINIER')]
 final class ChefController extends AbstractController
 {
     #[Route('/chef/dashboard', name: 'app_chef_dashboard', methods: ['GET'])]

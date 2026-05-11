@@ -34,18 +34,5 @@
         </button>
     </div>
 
-    <div class="lg:col-span-12">
-        <section class="mb-20 mt-8" id="quick-meals">
-            <h2 class="font-headline-md text-headline-md mb-2">Utensils</h2>
-            <p class="text-on-surface-variant mb-8 font-body-md">Essential tools for this recipe.</p>
-            <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-6">
-                {% for utensil in utensils %}
-                    <div class="bg-white p-6 rounded-2xl recipe-shadow text-center flex flex-col items-center">
-                        <img class="w-24 h-24 object-contain mb-4" alt="{{ utensil.name }}" src="{{ utensil.image }}"/>
-                        <span class="text-label-md font-bold">{{ utensil.name }}</span>
-                    </div>
-                {% endfor %}
-            </div>
-        </section>
-    </div>
+
 </section>
