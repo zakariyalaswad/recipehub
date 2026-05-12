@@ -33,7 +33,7 @@ final class TagRecetteController extends AbstractController
             $entityManager->persist($tagRecette);
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_tag_recette_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_admin_dashboard', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('tag_recette/new.html.twig', [
@@ -59,7 +59,7 @@ final class TagRecetteController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_tag_recette_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_admin_dashboard', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('tag_recette/edit.html.twig', [
@@ -76,6 +76,6 @@ final class TagRecetteController extends AbstractController
             $entityManager->flush();
         }
 
-        return $this->redirectToRoute('app_tag_recette_index', [], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('app_admin_dashboard', [], Response::HTTP_SEE_OTHER);
     }
 }

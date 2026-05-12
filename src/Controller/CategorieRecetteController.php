@@ -33,7 +33,7 @@ final class CategorieRecetteController extends AbstractController
             $entityManager->persist($categorieRecette);
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_categorie_recette_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_admin_categories', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('categorie_recette/new.html.twig', [
@@ -59,7 +59,7 @@ final class CategorieRecetteController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_categorie_recette_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_admin_categories', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('categorie_recette/edit.html.twig', [
@@ -76,6 +76,6 @@ final class CategorieRecetteController extends AbstractController
             $entityManager->flush();
         }
 
-        return $this->redirectToRoute('app_categorie_recette_index', [], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('app_admin_categories', [], Response::HTTP_SEE_OTHER);
     }
 }

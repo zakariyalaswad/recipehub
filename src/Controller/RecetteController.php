@@ -33,8 +33,6 @@ final class RecetteController extends AbstractController
         $queryBuilder = $recetteRepository->createQueryBuilder('r')
             ->leftJoin('r.categorie', 'c')->addSelect('c')
             ->leftJoin('r.auteur', 'a')->addSelect('a')
-            ->leftJoin('r.ingredients', 'ing')->addSelect('ing')
-            ->leftJoin('r.tags', 't')->addSelect('t')
             ->where('r.publiee = true')
             ->orderBy('r.dateCreation', 'DESC')
             ->addOrderBy('r.id', 'DESC');
@@ -47,8 +45,16 @@ final class RecetteController extends AbstractController
                     OR LOWER(r.description) LIKE :search 
                     OR LOWER(a.pseudo) LIKE :search 
                     OR LOWER(a.email) LIKE :search
-                    OR LOWER(ing.nom) LIKE :search
-                    OR LOWER(t.nom) LIKE :search')
+                    OR EXISTS (
+                        SELECT 1 FROM App\\Entity\\Ingredient ing2
+                        WHERE ing2 MEMBER OF r.ingredients
+                        AND LOWER(ing2.nom) LIKE :search
+                    )
+                    OR EXISTS (
+                        SELECT 1 FROM App\\Entity\\TagRecette t2
+                        WHERE t2 MEMBER OF r.tags
+                        AND LOWER(t2.nom) LIKE :search
+                    )')
                 ->setParameter('search', $searchLower);
         }
 

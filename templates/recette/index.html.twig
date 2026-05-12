@@ -195,7 +195,7 @@
 
             <!-- Recipes Grid -->
             {% if recettes %}
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6 mb-12">
+                <div class="grid grid-cols-1 gap-6 mb-12">
                     {% for recette in recettes %}
                         <a href="{{ path('app_recette_show', {'id': recette.id}) }}" class="recipe-card group">
                             <div class="rounded-xl overflow-hidden bg-surface-container-low shadow-md">
@@ -267,7 +267,7 @@
                     <nav class="flex justify-center items-center gap-2 mt-12" aria-label="Pagination">
                         <!-- Previous Button -->
                         {% if currentPage > 1 %}
-                            <a href="{{ path('app_recette_index', {'page': currentPage - 1}) }}" class="px-4 py-2 rounded-lg bg-primary text-on-primary font-label-md hover:scale-105 transition-transform duration-200 flex items-center gap-1">
+                            <a href="{{ path('app_recette_index', {'page': currentPage - 1, 'search': search, 'categorie': selectedCategory}) }}" class="px-4 py-2 rounded-lg bg-primary text-on-primary font-label-md hover:scale-105 transition-transform duration-200 flex items-center gap-1">
                                 <span class="material-symbols-outlined text-[18px]">chevron_left</span>
                                 Previous
                             </a>
@@ -284,7 +284,7 @@
                             {% set end = min(totalPages, currentPage + 2) %}
                             
                             {% if start > 1 %}
-                                <a href="{{ path('app_recette_index', {'page': 1}) }}" class="px-3 py-2 rounded-lg text-on-surface hover:bg-surface-container transition-colors duration-200 font-label-md">1</a>
+                                <a href="{{ path('app_recette_index', {'page': 1, 'search': search, 'categorie': selectedCategory}) }}" class="px-3 py-2 rounded-lg text-on-surface hover:bg-surface-container transition-colors duration-200 font-label-md">1</a>
                                 {% if start > 2 %}
                                     <span class="text-on-surface-variant">...</span>
                                 {% endif %}
@@ -294,7 +294,7 @@
                                 {% if page == currentPage %}
                                     <button disabled class="px-3 py-2 rounded-lg bg-primary text-on-primary font-label-md font-bold">{{ page }}</button>
                                 {% else %}
-                                    <a href="{{ path('app_recette_index', {'page': page}) }}" class="px-3 py-2 rounded-lg text-on-surface hover:bg-surface-container transition-colors duration-200 font-label-md">{{ page }}</a>
+                                    <a href="{{ path('app_recette_index', {'page': page, 'search': search, 'categorie': selectedCategory}) }}" class="px-3 py-2 rounded-lg text-on-surface hover:bg-surface-container transition-colors duration-200 font-label-md">{{ page }}</a>
                                 {% endif %}
                             {% endfor %}
 
@@ -302,13 +302,13 @@
                                 {% if end < totalPages - 1 %}
                                     <span class="text-on-surface-variant">...</span>
                                 {% endif %}
-                                <a href="{{ path('app_recette_index', {'page': totalPages}) }}" class="px-3 py-2 rounded-lg text-on-surface hover:bg-surface-container transition-colors duration-200 font-label-md">{{ totalPages }}</a>
+                                <a href="{{ path('app_recette_index', {'page': totalPages, 'search': search, 'categorie': selectedCategory}) }}" class="px-3 py-2 rounded-lg text-on-surface hover:bg-surface-container transition-colors duration-200 font-label-md">{{ totalPages }}</a>
                             {% endif %}
                         </div>
 
                         <!-- Next Button -->
                         {% if currentPage < totalPages %}
-                            <a href="{{ path('app_recette_index', {'page': currentPage + 1}) }}" class="px-4 py-2 rounded-lg bg-primary text-on-primary font-label-md hover:scale-105 transition-transform duration-200 flex items-center gap-1">
+                            <a href="{{ path('app_recette_index', {'page': currentPage + 1, 'search': search, 'categorie': selectedCategory}) }}" class="px-4 py-2 rounded-lg bg-primary text-on-primary font-label-md hover:scale-105 transition-transform duration-200 flex items-center gap-1">
                                 Next
                                 <span class="material-symbols-outlined text-[18px]">chevron_right</span>
                             </a>

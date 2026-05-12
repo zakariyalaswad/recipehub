@@ -49,7 +49,7 @@ class CategorieRecette
     /**
      * @var Collection<int, Recette>
      */
-    #[ORM\OneToMany(targetEntity: Recette::class, mappedBy: 'categorie')]
+    #[ORM\OneToMany(targetEntity: Recette::class, mappedBy: 'categorie',cascade: ['persist','remove'])]
     #[Groups(['categorie:read'])]
     private Collection $recettes;
 
