@@ -214,8 +214,8 @@
 
                 <!-- Navigation -->
                 <div class="flex gap-2">
-                    <a href="{{ path('app_home') }}" class="flex-1 bg-slate-100 text-slate-700 text-center font-medium py-2 rounded-lg hover:bg-slate-200 transition-colors">
-                        Accueil
+                    <a href="{{ path('app_recette_index') }}" class="flex-1 bg-slate-100 text-slate-700 text-center font-medium py-2 rounded-lg hover:bg-slate-200 transition-colors">
+                        Recettes
                     </a>
                     {% if is_granted('ROLE_CUISINIER') %}
                                 <a href="{{ path('app_chef_dashboard') }}" class="px-4 py-2 rounded-xl bg-primary text-on-primary font-label-md hover:scale-105 transition-transform duration-200 flex items-center gap-2">

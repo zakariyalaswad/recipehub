@@ -113,7 +113,7 @@ final class RecetteController extends AbstractController
             $entityManager->persist($recette);
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_recette_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute($this->getRecipeRedirectRoute(), [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('recette/new.html.twig', [
@@ -165,7 +165,7 @@ final class RecetteController extends AbstractController
             $entityManager->flush();
             $this->addFlash('success', 'Recette modifiée avec succès');
 
-            return $this->redirectToRoute('app_recette_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute($this->getRecipeRedirectRoute(), [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('recette/edit.html.twig', [
@@ -192,6 +192,11 @@ final class RecetteController extends AbstractController
             $entityManager->flush();
         }
 
-        return $this->redirectToRoute('app_recette_index', [], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute($this->getRecipeRedirectRoute(), [], Response::HTTP_SEE_OTHER);
+    }
+
+    private function getRecipeRedirectRoute(): string
+    {
+        return $this->isGranted('ROLE_ADMIN') ? 'app_admin_recettes' : 'app_recette_index';
     }
 }
