@@ -12,8 +12,38 @@
                     <a href="{{ path('app_home') }}" class="text-[#006d37] hover:underline text-sm mb-2 inline-block">← RecipeHub</a>
                     <h1 class="text-3xl font-newsreader font-bold text-slate-900">{{ recette.titre }}</h1>
                 </div>
-                <div class="flex gap-2">
-                    {% if recette.auteur and recette.auteur.id == app.user.id %}
+                <div class="flex gap-2 flex-wrap justify-end">
+                    {% if app.user %}
+                        {% if isFavorite %}
+                            <form method="POST" action="{{ path('app_favoris_remove', {'id': recette.id}) }}" class="inline">
+                                <input type="hidden" name="_token" value="{{ csrf_token('remove_favorite_' ~ recette.id) }}">
+                                <button type="submit" class="bg-rose-600 text-white px-4 py-2 rounded-lg hover:bg-rose-700 transition-colors inline-flex items-center gap-2">
+                                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                                        <path d="M12.1 8.64l-.1.1-.11-.11C10.14 6.79 8.36 5 5.78 5 3.08 5 1 7.08 1 9.78c0 2.54 1.94 4.6 4.83 7.14L12 22l6.17-5.08C21.06 14.38 23 12.32 23 9.78 23 7.08 20.92 5 18.22 5c-2.58 0-4.36 1.79-6.12 3.64z"/>
+                                    </svg>
+                                    Retirer des favoris
+                                </button>
+                            </form>
+                        {% else %}
+                            <form method="POST" action="{{ path('app_favoris_add', {'id': recette.id}) }}" class="inline">
+                                <input type="hidden" name="_token" value="{{ csrf_token('add_favorite_' ~ recette.id) }}">
+                                <button type="submit" class="bg-[#006d37] text-white px-4 py-2 rounded-lg hover:bg-[#005a2d] transition-colors inline-flex items-center gap-2">
+                                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                                        <path d="M12.1 8.64l-.1.1-.11-.11C10.14 6.79 8.36 5 5.78 5 3.08 5 1 7.08 1 9.78c0 2.54 1.94 4.6 4.83 7.14L12 22l6.17-5.08C21.06 14.38 23 12.32 23 9.78 23 7.08 20.92 5 18.22 5c-2.58 0-4.36 1.79-6.12 3.64z"/>
+                                    </svg>
+                                    Ajouter aux favoris
+                                </button>
+                            </form>
+                        {% endif %}
+                    {% else %}
+                        <a href="{{ path('app_login') }}" class="bg-[#006d37] text-white px-4 py-2 rounded-lg hover:bg-[#005a2d] transition-colors inline-flex items-center gap-2">
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+                            </svg>
+                            Login to favorite
+                        </a>
+                    {% endif %}
+                    {% if recette.auteur and app.user and recette.auteur.id == app.user.id %}
                         <a href="{{ path('app_recette_edit', {'id': recette.id}) }}" class="bg-[#006d37] text-white px-4 py-2 rounded-lg hover:bg-[#005a2d] transition-colors inline-flex items-center gap-2">
                             <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
                                 <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25z"/>

@@ -5,9 +5,11 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use App\Entity\Recette;
 use App\Form\RecetteType;
 use App\Repository\RecetteRepository;
+use App\Repository\CategorieRecetteRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use App\Service\FileUploader;
@@ -20,10 +22,68 @@ final class RecetteController extends AbstractController
     }
 
     #[Route(name: 'app_recette_index', methods: ['GET'])]
-    public function index(RecetteRepository $recetteRepository): Response
+    public function index(RecetteRepository $recetteRepository, CategorieRecetteRepository $categorieRecetteRepository, Request $request): Response
     {
+        $page = max(1, (int) $request->query->get('page', 1));
+        $limit = 10;
+        $search = trim((string) $request->query->get('search', ''));
+        $categoryId = $request->query->get('categorie');
+
+        // Get all published recipes with filters
+        $queryBuilder = $recetteRepository->createQueryBuilder('r')
+            ->leftJoin('r.categorie', 'c')->addSelect('c')
+            ->leftJoin('r.auteur', 'a')->addSelect('a')
+            ->leftJoin('r.ingredients', 'ing')->addSelect('ing')
+            ->leftJoin('r.tags', 't')->addSelect('t')
+            ->where('r.publiee = true')
+            ->orderBy('r.dateCreation', 'DESC')
+            ->addOrderBy('r.id', 'DESC');
+
+        // Apply search filter
+        if ($search !== '') {
+            $searchLower = '%' . mb_strtolower($search) . '%';
+            $queryBuilder
+                ->andWhere('LOWER(r.titre) LIKE :search 
+                    OR LOWER(r.description) LIKE :search 
+                    OR LOWER(a.pseudo) LIKE :search 
+                    OR LOWER(a.email) LIKE :search
+                    OR LOWER(ing.nom) LIKE :search
+                    OR LOWER(t.nom) LIKE :search')
+                ->setParameter('search', $searchLower);
+        }
+
+        // Apply category filter
+        if ($categoryId !== null && $categoryId !== '') {
+            $queryBuilder
+                ->andWhere('c.id = :categoryId')
+                ->setParameter('categoryId', (int) $categoryId);
+        }
+
+        // Count total recipes
+        $countQueryBuilder = clone $queryBuilder;
+        $totalRecipes = (int) $countQueryBuilder
+            ->select('COUNT(DISTINCT r.id)')
+            ->getQuery()
+            ->getSingleScalarResult();
+
+        $totalPages = max(1, (int) ceil($totalRecipes / $limit));
+        $page = min($page, $totalPages);
+
+        // Get paginated recipes
+        $recettes = $queryBuilder
+            ->setFirstResult(($page - 1) * $limit)
+            ->setMaxResults($limit)
+            ->getQuery()
+            ->getResult();
+
         return $this->render('recette/index.html.twig', [
-            'recettes' => $recetteRepository->findAll(),
+            'recettes' => $recettes,
+            'currentPage' => $page,
+            'totalPages' => $totalPages,
+            'totalRecipes' => $totalRecipes,
+            'categories' => $categorieRecetteRepository->findBy([], ['nom' => 'ASC']),
+            'search' => $search,
+            'selectedCategory' => $categoryId,
         ]);
     }
 
@@ -57,10 +117,13 @@ final class RecetteController extends AbstractController
     }
 
     #[Route('/{id}', name: 'app_recette_show', methods: ['GET'])]
-    public function show(Recette $recette): Response
+    public function show(Recette $recette, RequestStack $requestStack): Response
     {
+        $favoris = $requestStack->getSession()->get('favoris', []);
+
         return $this->render('recette/show.html.twig', [
             'recette' => $recette,
+            'isFavorite' => in_array($recette->getId(), $favoris),
         ]);
     }
 

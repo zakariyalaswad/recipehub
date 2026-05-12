@@ -638,7 +638,7 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *         }>,
  *     },
  *     uid?: bool|array{ // Uid configuration
- *         enabled?: bool|Param, // Default: true
+ *         enabled?: bool|Param, // Default: false
  *         default_uuid_version?: 7|6|4|1|Param, // Default: 7
  *         name_based_uuid_version?: 5|3|Param, // Default: 5
  *         name_based_uuid_namespace?: scalar|Param|null,
@@ -1469,6 +1469,55 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *         skip_same_as_origin?: bool|Param,
  *     }>,
  * }
+ * @psalm-type KnpPaginatorConfig = array{
+ *     default_options?: array{
+ *         sort_field_name?: scalar|Param|null, // Default: "sort"
+ *         sort_direction_name?: scalar|Param|null, // Default: "direction"
+ *         filter_field_name?: scalar|Param|null, // Default: "filterField"
+ *         filter_value_name?: scalar|Param|null, // Default: "filterValue"
+ *         page_name?: scalar|Param|null, // Default: "page"
+ *         distinct?: bool|Param, // Default: true
+ *         page_out_of_range?: scalar|Param|null, // Default: "ignore"
+ *         default_limit?: scalar|Param|null, // Default: 10
+ *     },
+ *     template?: array{
+ *         pagination?: scalar|Param|null, // Default: "@KnpPaginator/Pagination/sliding.html.twig"
+ *         rel_links?: scalar|Param|null, // Default: "@KnpPaginator/Pagination/rel_links.html.twig"
+ *         filtration?: scalar|Param|null, // Default: "@KnpPaginator/Pagination/filtration.html.twig"
+ *         sortable?: scalar|Param|null, // Default: "@KnpPaginator/Pagination/sortable_link.html.twig"
+ *     },
+ *     page_range?: scalar|Param|null, // Default: 5
+ *     page_limit?: scalar|Param|null, // Default: null
+ *     convert_exception?: bool|Param, // Default: false
+ *     remove_first_page_param?: bool|Param, // Default: false
+ * }
+ * @psalm-type SymfonycastsVerifyEmailConfig = array{
+ *     lifetime?: int|Param, // The length of time in seconds that a signed URI is valid for after it is created. // Default: 3600
+ * }
+ * @psalm-type StimulusConfig = array{
+ *     controller_paths?: list<scalar|Param|null>,
+ *     controllers_json?: scalar|Param|null, // Default: "%kernel.project_dir%/assets/controllers.json"
+ * }
+ * @psalm-type TurboConfig = array{
+ *     broadcast?: bool|array{
+ *         enabled?: bool|Param, // Default: true
+ *         entity_template_prefixes?: list<scalar|Param|null>,
+ *         doctrine_orm?: bool|array{ // Enable the Doctrine ORM integration
+ *             enabled?: bool|Param, // Default: true
+ *         },
+ *     },
+ *     default_transport?: scalar|Param|null, // Default: "default"
+ * }
+ * @psalm-type WebpackEncoreConfig = array{
+ *     output_path?: scalar|Param|null, // The path where Encore is building the assets - i.e. Encore.setOutputPath()
+ *     crossorigin?: false|"anonymous"|"use-credentials"|Param, // crossorigin value when Encore.enableIntegrityHashes() is used, can be false (default), anonymous or use-credentials // Default: false
+ *     preload?: bool|Param, // preload all rendered script and link tags automatically via the http2 Link header. // Default: false
+ *     cache?: bool|Param, // Enable caching of the entry point file(s) // Default: false
+ *     strict_mode?: bool|Param, // Throw an exception if the entrypoints.json file is missing or an entry is missing from the data // Default: true
+ *     builds?: array<string, scalar|Param|null>,
+ *     script_attributes?: array<string, scalar|Param|null>,
+ *     link_attributes?: array<string, scalar|Param|null>,
+ * }
  * @psalm-type ApiPlatformConfig = array{
  *     title?: scalar|Param|null, // The title of the API. // Default: ""
  *     description?: scalar|Param|null, // The description of the API. // Default: ""
@@ -1765,55 +1814,6 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *         ...<string, mixed>
  *     },
  * }
- * @psalm-type KnpPaginatorConfig = array{
- *     default_options?: array{
- *         sort_field_name?: scalar|Param|null, // Default: "sort"
- *         sort_direction_name?: scalar|Param|null, // Default: "direction"
- *         filter_field_name?: scalar|Param|null, // Default: "filterField"
- *         filter_value_name?: scalar|Param|null, // Default: "filterValue"
- *         page_name?: scalar|Param|null, // Default: "page"
- *         distinct?: bool|Param, // Default: true
- *         page_out_of_range?: scalar|Param|null, // Default: "ignore"
- *         default_limit?: scalar|Param|null, // Default: 10
- *     },
- *     template?: array{
- *         pagination?: scalar|Param|null, // Default: "@KnpPaginator/Pagination/sliding.html.twig"
- *         rel_links?: scalar|Param|null, // Default: "@KnpPaginator/Pagination/rel_links.html.twig"
- *         filtration?: scalar|Param|null, // Default: "@KnpPaginator/Pagination/filtration.html.twig"
- *         sortable?: scalar|Param|null, // Default: "@KnpPaginator/Pagination/sortable_link.html.twig"
- *     },
- *     page_range?: scalar|Param|null, // Default: 5
- *     page_limit?: scalar|Param|null, // Default: null
- *     convert_exception?: bool|Param, // Default: false
- *     remove_first_page_param?: bool|Param, // Default: false
- * }
- * @psalm-type SymfonycastsVerifyEmailConfig = array{
- *     lifetime?: int|Param, // The length of time in seconds that a signed URI is valid for after it is created. // Default: 3600
- * }
- * @psalm-type StimulusConfig = array{
- *     controller_paths?: list<scalar|Param|null>,
- *     controllers_json?: scalar|Param|null, // Default: "%kernel.project_dir%/assets/controllers.json"
- * }
- * @psalm-type TurboConfig = array{
- *     broadcast?: bool|array{
- *         enabled?: bool|Param, // Default: true
- *         entity_template_prefixes?: list<scalar|Param|null>,
- *         doctrine_orm?: bool|array{ // Enable the Doctrine ORM integration
- *             enabled?: bool|Param, // Default: true
- *         },
- *     },
- *     default_transport?: scalar|Param|null, // Default: "default"
- * }
- * @psalm-type WebpackEncoreConfig = array{
- *     output_path?: scalar|Param|null, // The path where Encore is building the assets - i.e. Encore.setOutputPath()
- *     crossorigin?: false|"anonymous"|"use-credentials"|Param, // crossorigin value when Encore.enableIntegrityHashes() is used, can be false (default), anonymous or use-credentials // Default: false
- *     preload?: bool|Param, // preload all rendered script and link tags automatically via the http2 Link header. // Default: false
- *     cache?: bool|Param, // Enable caching of the entry point file(s) // Default: false
- *     strict_mode?: bool|Param, // Throw an exception if the entrypoints.json file is missing or an entry is missing from the data // Default: true
- *     builds?: array<string, scalar|Param|null>,
- *     script_attributes?: array<string, scalar|Param|null>,
- *     link_attributes?: array<string, scalar|Param|null>,
- * }
  * @psalm-type ConfigType = array{
  *     imports?: ImportsConfig,
  *     parameters?: ParametersConfig,
@@ -1826,12 +1826,12 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *     security?: SecurityConfig,
  *     monolog?: MonologConfig,
  *     nelmio_cors?: NelmioCorsConfig,
- *     api_platform?: ApiPlatformConfig,
  *     knp_paginator?: KnpPaginatorConfig,
  *     symfonycasts_verify_email?: SymfonycastsVerifyEmailConfig,
  *     stimulus?: StimulusConfig,
  *     turbo?: TurboConfig,
  *     webpack_encore?: WebpackEncoreConfig,
+ *     api_platform?: ApiPlatformConfig,
  *     "when@dev"?: array{
  *         imports?: ImportsConfig,
  *         parameters?: ParametersConfig,
@@ -1847,12 +1847,12 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *         monolog?: MonologConfig,
  *         maker?: MakerConfig,
  *         nelmio_cors?: NelmioCorsConfig,
- *         api_platform?: ApiPlatformConfig,
  *         knp_paginator?: KnpPaginatorConfig,
  *         symfonycasts_verify_email?: SymfonycastsVerifyEmailConfig,
  *         stimulus?: StimulusConfig,
  *         turbo?: TurboConfig,
  *         webpack_encore?: WebpackEncoreConfig,
+ *         api_platform?: ApiPlatformConfig,
  *     },
  *     "when@prod"?: array{
  *         imports?: ImportsConfig,
@@ -1866,12 +1866,12 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *         security?: SecurityConfig,
  *         monolog?: MonologConfig,
  *         nelmio_cors?: NelmioCorsConfig,
- *         api_platform?: ApiPlatformConfig,
  *         knp_paginator?: KnpPaginatorConfig,
  *         symfonycasts_verify_email?: SymfonycastsVerifyEmailConfig,
  *         stimulus?: StimulusConfig,
  *         turbo?: TurboConfig,
  *         webpack_encore?: WebpackEncoreConfig,
+ *         api_platform?: ApiPlatformConfig,
  *     },
  *     "when@test"?: array{
  *         imports?: ImportsConfig,
@@ -1886,12 +1886,12 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *         security?: SecurityConfig,
  *         monolog?: MonologConfig,
  *         nelmio_cors?: NelmioCorsConfig,
- *         api_platform?: ApiPlatformConfig,
  *         knp_paginator?: KnpPaginatorConfig,
  *         symfonycasts_verify_email?: SymfonycastsVerifyEmailConfig,
  *         stimulus?: StimulusConfig,
  *         turbo?: TurboConfig,
  *         webpack_encore?: WebpackEncoreConfig,
+ *         api_platform?: ApiPlatformConfig,
  *     },
  *     ...<string, ExtensionType|array{ // extra keys must follow the when@%env% pattern or match an extension alias
  *         imports?: ImportsConfig,
